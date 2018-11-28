@@ -19,7 +19,8 @@ public class EtoroController {
     }
 
     public void init() {
-        String pathToChrome = "/home/oleg/IdeaProjects/etorobot/chromedriver";
+
+        String pathToChrome = "chromedriver";
         System.setProperty("webdriver.chrome.driver", pathToChrome);
         driver.get("https://www.etoro.com/portfolio");
 
