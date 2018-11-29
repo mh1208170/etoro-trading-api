@@ -3,6 +3,7 @@ import model.Portfolio;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class EtoroController {
 
     public void init() {
 
-        String pathToChrome = "chromedriver";
+        String pathToChrome = "drivers/mac/chromedriver";
         System.setProperty("webdriver.chrome.driver", pathToChrome);
         driver.get("https://www.etoro.com/portfolio");
 
@@ -28,6 +29,22 @@ public class EtoroController {
         driver.findElement(By.id("password")).sendKeys(pwd);
 
         driver.findElement(By.className("e-btn-big")).click();
+
+        System.out.println();
+    }
+
+    public void setMode(String mode) {
+        int pos = 2;
+        switch (mode) {
+            case "real":
+                pos = 1;
+                break;
+            case "virtual":
+                pos = 2;
+        }
+        driver.findElement(By.cssSelector(".i-menu-link-mode-demo")).click();
+        driver.findElements(By.cssSelector("div.w-menu > div.w-menu-main > div:nth-child(2) > div > div > div:nth-child(" + pos + ")")).get(0).click();
+        driver.findElement(By.className("w-sm-footer-button")).click();
     }
 
     public Portfolio getPortfolio() throws InterruptedException {
