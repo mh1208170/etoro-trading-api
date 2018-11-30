@@ -15,6 +15,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         ChromeOptions opt = new ChromeOptions();
         opt.addArguments("--window-size=1920,1080");
+
         EtoroController controller = new EtoroController(new ChromeDriver(opt), args[0], args[1]);
         controller.init();
         Portfolio pf = controller.getPortfolio();

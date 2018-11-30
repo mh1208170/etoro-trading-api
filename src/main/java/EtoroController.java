@@ -20,8 +20,13 @@ public class EtoroController {
     }
 
     public void init() {
+        String pathToChrome;
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            pathToChrome = "drivers/mac/chromedriver";
+        } else {
+            pathToChrome = "drivers/ubuntu/chromedriver";
+        }
 
-        String pathToChrome = "drivers/mac/chromedriver";
         System.setProperty("webdriver.chrome.driver", pathToChrome);
         driver.get("https://www.etoro.com/portfolio");
 
