@@ -1,13 +1,9 @@
-import model.Portfolio;
-import org.openqa.selenium.By;
+import bootstrap.Initializer;
+import controllers.EtoroPortfolioController;
+import model.portfolio.Portfolio;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.util.ArrayList;
 
 public class Main {
 
@@ -16,8 +12,12 @@ public class Main {
         ChromeOptions opt = new ChromeOptions();
         opt.addArguments("--window-size=1920,1080");
 
-        EtoroController controller = new EtoroController(new ChromeDriver(opt), args[0], args[1]);
-        controller.init();
+        WebDriver driver = new ChromeDriver(opt);
+        Initializer initializer = new Initializer(driver, args[0], args[1]);
+        initializer.init();
+
+        EtoroPortfolioController controller = new EtoroPortfolioController(driver, "https://www.etoro.com/people/alnayef/portfolio");
+
         Portfolio pf = controller.getPortfolio();
         controller.setMode("virtual");
         Thread.sleep(200);
