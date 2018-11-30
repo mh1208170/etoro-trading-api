@@ -16,21 +16,22 @@ public class Portfolio {
 
     private String type = "real";
     private List<CopiedPortfolio> copiedPortfolios = new ArrayList<>();
-    private List<Position> positions = new ArrayList<>();
+    private List<PositionGroup> positionGroups = new ArrayList<>();
 
     public void addCopiedPortfolio(CopiedPortfolio a) {
         copiedPortfolios.add(a);
     }
 
-    public void addPosition(Position p) {
-        positions.add(p);
+    public void addPositionGroup(PositionGroup p) {
+        positionGroups.add(p);
     }
-
     @Override
     public String toString() {
         StringBuilder presentation = new StringBuilder();
-        copiedPortfolios.forEach(presentation::append) ;
-        positions.forEach(presentation::append);
+        presentation.append("-----Portfolio------\n");
+        //copiedPortfolios.forEach(presentation::append) ;
+        positionGroups.forEach(presentation::append);
+        presentation.append("---------------------\n");
         return presentation.toString();
     }
 }

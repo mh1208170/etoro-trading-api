@@ -25,6 +25,9 @@ public class Initializer {
         }
 
         System.setProperty("webdriver.chrome.driver", pathToChrome);
+    }
+
+    public void login() {
         driver.get("https://www.etoro.com/portfolio");
 
         driver.findElement(By.id("username")).sendKeys(uname);

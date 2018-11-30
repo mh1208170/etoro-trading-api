@@ -1,5 +1,5 @@
 import bootstrap.Initializer;
-import controllers.EtoroPortfolioController;
+import controllers.EtoroPortfolioScreen;
 import model.portfolio.Portfolio;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,16 +15,19 @@ public class Main {
         WebDriver driver = new ChromeDriver(opt);
         Initializer initializer = new Initializer(driver, args[0], args[1]);
         initializer.init();
+       // initializer.login();
 
-        EtoroPortfolioController controller = new EtoroPortfolioController(driver, "https://www.etoro.com/people/alnayef/portfolio");
+        EtoroPortfolioScreen controller = new EtoroPortfolioScreen(driver, "https://www.etoro.com/people/alnayef/portfolio");
 
         Portfolio pf = controller.getPortfolio();
-        controller.setMode("virtual");
-        Thread.sleep(200);
+//        controller.setMode("virtual");
+
 
         while (true) {
+            Thread.sleep(300);
             System.out.println(pf);
             pf = controller.getPortfolio();
+
 
         }
 
