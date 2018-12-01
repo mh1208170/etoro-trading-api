@@ -67,7 +67,7 @@ public class EtoroPortfolioScreen {
             }
             portfolio.addPositionGroup(pg);
             driver.navigate().back();
-            Thread.sleep(100);
+            Thread.sleep(300);
 
         }
 
