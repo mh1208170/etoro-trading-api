@@ -9,21 +9,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class Authentication {
 
-    @Autowired
-    WebDriver driver;
 
     @Autowired
     ApplicationArguments applicationArguments;
 
-    public void login() {
+    public void login(WebDriver driver) throws InterruptedException {
         String args[] = applicationArguments.getSourceArgs();
-        driver.get("https://www.etoro.com/portfolio");
+        driver.get("https://www.etoro.com/watchlists");
 
         driver.findElement(By.id("username")).sendKeys(args[0]);
         driver.findElement(By.id("password")).sendKeys(args[1]);
 
         driver.findElement(By.className("e-btn-big")).click();
-
+        Thread.sleep(500);
         System.out.println();
     }
 }

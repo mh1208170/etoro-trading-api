@@ -46,7 +46,6 @@ public class Position {
 
     @Override
     public String toString() {
-
         return String.format("------- %s %s %s ------\n", name, type, info);
     }
 }
