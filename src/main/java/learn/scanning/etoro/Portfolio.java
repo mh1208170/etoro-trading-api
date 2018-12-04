@@ -1,4 +1,4 @@
-package learn.portfolio;
+package learn.scanning.etoro;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +15,8 @@ import java.util.List;
 public class Portfolio {
 
     private String type = "real";
-    private List<CopiedPortfolio> copiedPortfolios = new ArrayList<>();
-    private List<PositionGroup> positionGroups = new ArrayList<>();
 
-    public void addCopiedPortfolio(CopiedPortfolio a) {
-        copiedPortfolios.add(a);
-    }
+    private List<PositionGroup> positionGroups = new ArrayList<>();
 
     public void addPositionGroup(PositionGroup p) {
         positionGroups.add(p);

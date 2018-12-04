@@ -1,8 +1,5 @@
-package learn.scanning;
+package learn.scanning.etoro;
 
-import learn.portfolio.Portfolio;
-import learn.portfolio.Position;
-import learn.portfolio.PositionGroup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,7 +32,7 @@ public class EtoroPortfolioScanner {
         for(int j = 0; j < els.size(); j++) {
             PositionGroup pg =  new PositionGroup();
             WebElement pgEl = driver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div/ui-table/ui-table-body/a[" + (j + 1) + "]"));
-            pg.setName(pgEl.getText());
+            pg.parseInfo(pgEl.getText());
             pgEl.click();
             Thread.sleep(300);
             List<WebElement> posEls = driver.findElements(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div[2]/div/ui-table/ui-table-body/div"));
@@ -43,7 +40,7 @@ public class EtoroPortfolioScanner {
                 Position p = new Position();
                 //WebElement pEl = posEls.get(i);
                 WebElement pEl = driver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div[2]/div/ui-table/ui-table-body/div["+(i+1) + "]"));
-                p.setName(pEl.getText());
+                p.parseInfo(pEl.getText());
                 pg.addPosition(p);
             }
             portfolio.addPositionGroup(pg);

@@ -1,10 +1,11 @@
-package learn.portfolio;
+package learn.scanning.etoro;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,9 @@ import java.util.List;
 public class PositionGroup {
 
     private String name;
+    private String type;
+    private BigDecimal invested;
+    private BigDecimal profitPr;
 
     private List<Position> positions = new ArrayList<>();
 
@@ -22,8 +26,19 @@ public class PositionGroup {
         positions.add(p);
     }
 
+    public void parseInfo(String info) {
+        String split[] =info.split("\n");
+        this.setName(split[0]);
+        String type = (split[1].startsWith("Buying")) ? "buy": "sell";
+        this.setType(type);
+        String valueSplit[] = split[1].replaceAll("(Selling|Buying)", "").split("%");
+        this.setInvested(new BigDecimal( valueSplit[1]));
+        this.setProfitPr(new BigDecimal(valueSplit[2]));
+    }
+
     @Override
     public String toString() {
+
         StringBuilder sb = new StringBuilder();
         positions.forEach(sb::append);
         return sb.toString();
