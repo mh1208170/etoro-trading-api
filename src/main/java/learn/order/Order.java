@@ -19,5 +19,6 @@ public class Order {
     private BigDecimal sl;
     private BigDecimal tp;
     private Integer leverage;
+    private String positionId;
 
 }

@@ -17,4 +17,16 @@ public class ZuluPosition {
     private String tradeType;
     private Date dateTime;
     private Double stdLotds;
+
+    @Override
+    public int hashCode() {
+        return Integer.parseInt(id);
+    }
+
+    @Override
+    //TODO
+    public boolean equals(Object obj) {
+        ZuluPosition zp = (ZuluPosition) obj;
+        return id.equals(zp.getId());
+    }
 }

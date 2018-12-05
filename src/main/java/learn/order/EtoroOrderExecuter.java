@@ -1,5 +1,6 @@
 package learn.order;
 
+import learn.scanning.etoro.Position;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -8,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-
-import static learn.constants.Links.OPEN_TRADE_POSITION_BUTTON;
-import static learn.constants.Links.SEARCH_STOCKS_INPUT;
+import java.util.List;
 
 @Component
 public class EtoroOrderExecuter {
@@ -35,7 +34,7 @@ public class EtoroOrderExecuter {
                 pos = 2;
         }
         try {
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
         authorizedDriver.findElement(By.className("inmplayer-popover-close-button")).click();
@@ -53,18 +52,53 @@ public class EtoroOrderExecuter {
         Thread.sleep(3000);
         authorizedDriver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/market/div/div/div[2]/trade-button/div")).click();
         Thread.sleep(1500);
-        WebElement inValue = authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[2]/div[2]/div[1]/div[2]/input"));
-        inValue.clear();
+
+
         try {
+
+            List<WebElement> sellBuyBtns = authorizedDriver.findElements(By.className("execution-head-button"));
+            if (o.getType().equalsIgnoreCase("sell")) {
+                sellBuyBtns.get(0).click();
+            } else {
+                sellBuyBtns.get(1).click();
+            }
+            Thread.sleep(200);
+            WebElement inValue = authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[2]/div[2]/div[1]/div[2]/input"));
+            inValue.clear();
             inValue.sendKeys("$" + o.getValue());
             inValue.sendKeys(Keys.ENTER);
+            Thread.sleep(50);
+            List<WebElement> leverages = authorizedDriver.findElements(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[3]/tabs/div[3]/tabscontent/tab[2]/div/div[1]/a"));
+            if (!leverages.isEmpty()) {
+                leverages.forEach(l -> {
+                    if (l.getText().replaceAll("X", "").equalsIgnoreCase(o.getLeverage() + "")) {
+                        l.click();
+                    }
+                });
+            }
             Thread.sleep(2000);
             authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[4]/div/button")).click();
-            authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[4]/div/button")).click();
+            //authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[4]/div/button")).click();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void closePosition(Position closed) {
+        authorizedDriver.navigate().to("https://www.etoro.com/portfolio/" + closed.getName() + "/");
+
+        List<WebElement> positions = authorizedDriver.findElements(By.className("ui-table-row"));
+
+        positions.forEach(position -> {
+            String info= position.getText().replaceAll("\\$","");
+            Position p = new Position();
+            p.parseInfo(info);
+            if (closed.getName().equalsIgnoreCase(p.getName()) && closed.getType().equalsIgnoreCase(p.getType()) && closed.getOpenTime().equals(p.getOpenTime())) {
+                // close
+            }
+        });
 
     }
 
