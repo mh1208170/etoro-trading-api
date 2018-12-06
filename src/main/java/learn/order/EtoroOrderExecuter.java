@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -86,20 +88,42 @@ public class EtoroOrderExecuter {
 
     }
 
-    public void closePosition(Position closed) {
+    //TODO
+    // Handle bug with wrong data of position!!!
+    public void closePosition(Position closed) throws InterruptedException {
         authorizedDriver.navigate().to("https://www.etoro.com/portfolio/" + closed.getName() + "/");
 
-        List<WebElement> positions = authorizedDriver.findElements(By.className("ui-table-row"));
+        List<WebElement> positions = authorizedDriver.findElements(By.xpath("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-body/div[1]/div"));
 
-        positions.forEach(position -> {
-            String info= position.getText().replaceAll("\\$","");
+
+        for(int i =1; i < positions.size(); i++) {
+            WebElement posEl = authorizedDriver.findElement(By.xpath(String.format("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-body/div[%d]/div[3]",i)));
+            //check posEl
             Position p = new Position();
-            p.parseInfo(info);
+            Date dt = closed.getMilisOpen();
+            closed.setOpenTime(LocalDateTime.of(dt.getYear() + 1900,dt.getMonth()+1,dt.getDay(),dt.getHours(), dt.getMinutes()));
+            p.parseInfo(posEl.getText().replaceAll("\\$",""));
             if (closed.getName().equalsIgnoreCase(p.getName()) && closed.getType().equalsIgnoreCase(p.getType()) && closed.getOpenTime().equals(p.getOpenTime())) {
-                // close
-            }
-        });
+                System.out.println("Closing pos!");
 
+                authorizedDriver.findElements(By.xpath(String.format("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-body/div[%d]/div[3]/ui-table-button-cell/div[2]",i))).get(0).click();
+                Thread.sleep(2000);
+                authorizedDriver.findElement(By.className("e-btn-big")).click();
+                System.out.println("Closed!");
+                return;
+            } else {
+                System.out.println("not found!");
+            }
+        }
+//        positions.forEach(position -> {
+//            String info= position.getText().replaceAll("\\$","");
+//            Position p = new Position();
+//            p.parseInfo(info);
+//            if (closed.getName().equalsIgnoreCase(p.getName()) && closed.getType().equalsIgnoreCase(p.getType()) && closed.getOpenTime().equals(p.getOpenTime())) {
+//                // close
+//                System.out.println("Closing pos!");
+//            }
+//        });
     }
 
 }

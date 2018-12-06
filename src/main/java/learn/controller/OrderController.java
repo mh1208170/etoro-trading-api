@@ -2,6 +2,7 @@ package learn.controller;
 
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
+import learn.scanning.etoro.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,13 @@ public class OrderController {
     @RequestMapping(value = "/order", method = RequestMethod.POST)
     public ResponseEntity createOrder(@RequestBody Order o) throws InterruptedException {
         executer.doOrder(o);
+        Thread.sleep(1000);
+        return ResponseEntity.ok().body(true);
+    }
+
+    @RequestMapping(value = "/order", method = RequestMethod.DELETE)
+    public ResponseEntity deletePosition(@RequestBody Position p) throws InterruptedException {
+        executer.closePosition(p);
         Thread.sleep(1000);
         return ResponseEntity.ok().body(true);
     }

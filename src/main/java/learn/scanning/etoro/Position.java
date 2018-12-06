@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Getter
 @AllArgsConstructor
@@ -25,6 +26,7 @@ public class Position {
     BigDecimal sl;
     BigDecimal tp;
     BigDecimal profitPr;
+    Date milisOpen;
 
 
     public void parseInfo(String info) {
