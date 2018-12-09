@@ -1,4 +1,4 @@
-package learn.scanning.zuulu;
+package learn.monitoring.zuulu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,10 +17,11 @@ public class ZuluPosition {
     private String tradeType;
     private Date dateTime;
     private Double stdLotds;
+    private String etoroRef;
 
     @Override
     public int hashCode() {
-        return Integer.parseInt(id);
+        return id.hashCode();
     }
 
     @Override

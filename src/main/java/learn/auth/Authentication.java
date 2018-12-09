@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Authentication {
 
-
     @Autowired
     ApplicationArguments applicationArguments;
 
@@ -22,6 +21,5 @@ public class Authentication {
 
         driver.findElement(By.className("e-btn-big")).click();
         Thread.sleep(500);
-        System.out.println();
     }
 }

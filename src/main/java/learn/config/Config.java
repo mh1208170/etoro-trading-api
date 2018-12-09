@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(basePackages = {"learn.scanning.zuulu"})
+@EnableFeignClients(basePackages = {"learn.monitoring.zuulu"})
 public class Config {
 
     @Autowired

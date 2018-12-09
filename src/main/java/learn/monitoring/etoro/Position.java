@@ -1,4 +1,4 @@
-package learn.scanning.etoro;
+package learn.monitoring.etoro;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +16,8 @@ import java.util.Date;
 @Setter
 public class Position {
 
+    String posId;
+    String zuluRefer;
     String type;
     String name;
     BigDecimal ammount;

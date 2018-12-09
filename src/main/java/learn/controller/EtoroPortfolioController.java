@@ -1,8 +1,8 @@
 package learn.controller;
 
 
-import learn.scanning.etoro.Portfolio;
-import learn.scanning.etoro.EtoroPortfolioScanner;
+import learn.monitoring.etoro.Portfolio;
+import learn.monitoring.etoro.EtoroPortfolioScanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

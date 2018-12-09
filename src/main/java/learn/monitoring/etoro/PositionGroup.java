@@ -1,4 +1,4 @@
-package learn.scanning.etoro;
+package learn.monitoring.etoro;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +38,6 @@ public class PositionGroup {
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
         positions.forEach(sb::append);
         return sb.toString();

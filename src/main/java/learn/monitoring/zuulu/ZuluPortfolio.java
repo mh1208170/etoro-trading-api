@@ -1,4 +1,4 @@
-package learn.scanning.zuulu;
+package learn.monitoring.zuulu;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,14 +11,14 @@ import java.util.Map;
 @Setter
 public class ZuluPortfolio {
 
-    private String tradersId;
+    private String id;
 
     List<ZuluPosition> positions;
 
     Map<String, ZuluPosition> positionsMap = new HashMap<>();
 
     public ZuluPortfolio(String id) {
-        this.tradersId = id;
+        this.id = id;
     }
 
 
