@@ -1,5 +1,6 @@
 package learn.monitoring.zuulu;
 
+import learn.monitoring.Portfolio;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ZuluPortfolio {
+public class ZuluPortfolio implements Portfolio {
 
     private String id;
 

@@ -1,11 +1,12 @@
 package learn.monitoring.zuulu;
 
 
-import learn.monitoring.etoro.Position;
+import learn.monitoring.Monitor;
+import learn.monitoring.Position;
+import learn.monitoring.etoro.EtoroPosition;
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
 import learn.units.TradeUnitService;
-import learn.units.TradeUnitsCounter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class ZuluPortfolioMonitor {
+public class ZuluPortfolioMonitor implements Monitor {
 
     @Autowired
     ZuluService zuluService;
@@ -83,15 +84,17 @@ public class ZuluPortfolioMonitor {
     }
 
     @Scheduled(fixedRate = 5000, initialDelay = 5000)
-    private void scan() {
+    public void scan() {
         getTraderPositions();
     }
 
     //TODO remove mocked position name
-    private void onOpenNewPosition(ZuluPosition p, String trader) throws InterruptedException {
+    @Override
+    public void onOpenNewPosition(Position pos, String trader) throws InterruptedException {
+        ZuluPosition p = (ZuluPosition) pos;
         log.info("Opening new position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         if((new Date().getTime() - p.getDateTime().getTime()) < 60000) {
-            Position etoroP = executer.doOrder(transformToOrder(p));
+            EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
             p.setEtoroRef(etoroP.getPosId());
             log.info("Opened " + p.getId());
         } else {
@@ -101,16 +104,16 @@ public class ZuluPortfolioMonitor {
     }
 
     //TODO remove mocked position name
-    private void onClosePosition(ZuluPosition p, String trader) throws InterruptedException {
+    @Override
+    public void onClosePosition(Position pos, String trader) throws InterruptedException {
+        ZuluPosition p = (ZuluPosition) pos;
         log.info("Closing position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
-        if(p.getEtoroRef() != null) {
-            executer.closePositionById(p.getEtoroRef(), p.getCurrencyName());
-            executer.closePositionById(p.getEtoroRef(), "btc");
+        if (p.getEtoroRef() != null) {
+            executer.closePositionById(p.getEtoroRef(), p.getCurrencyName().replace("/",""));
             log.info("deleted " + p.getId());
         } else {
             log.info("Position: tr{} {} {} {} {} was never opened on etoro",trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         }
-
     }
 
     //TODO remove mocked position name
@@ -123,8 +126,8 @@ public class ZuluPortfolioMonitor {
 //        return o;
         Order o = new Order();
         o.setValue(new BigDecimal(140));
-        o.setName("btc");
-//        o.setLeverage(30);
+        o.setName(zp.getCurrencyName().replace("/",""));
+        o.setLeverage(30);
         o.setType(zp.getTradeType());
         return o;
 

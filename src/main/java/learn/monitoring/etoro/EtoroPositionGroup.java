@@ -13,16 +13,16 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PositionGroup {
+public class EtoroPositionGroup {
 
     private String name;
     private String type;
     private BigDecimal invested;
     private BigDecimal profitPr;
 
-    private List<Position> positions = new ArrayList<>();
+    private List<EtoroPosition> positions = new ArrayList<>();
 
-    public void addPosition(Position p) {
+    public void addPosition(EtoroPosition p) {
         positions.add(p);
     }
 

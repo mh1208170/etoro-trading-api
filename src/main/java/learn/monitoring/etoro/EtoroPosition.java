@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class Position {
+public class EtoroPosition {
 
     String posId;
     String zuluRefer;

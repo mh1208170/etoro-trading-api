@@ -1,6 +1,6 @@
 package learn.order;
 
-import learn.monitoring.etoro.Position;
+import learn.monitoring.etoro.EtoroPosition;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -46,7 +46,7 @@ public class EtoroOrderExecuter {
         authorizedDriver.findElement(By.className("w-sm-footer-button")).click();
     }
 
-    public Position doOrder(Order o) throws InterruptedException {
+    public EtoroPosition doOrder(Order o) throws InterruptedException {
         //TODO
         //distinguish different trade types (they have different forms)
 
@@ -81,7 +81,7 @@ public class EtoroOrderExecuter {
         while (true) {
             try {
                 //save to database
-                Position res = new Position();
+                EtoroPosition res = new EtoroPosition();
                 res.setName(o.getName());
                 res.setAmmount(o.getValue());
                 res.setLeverage(String.valueOf(o.getLeverage()));
@@ -96,7 +96,7 @@ public class EtoroOrderExecuter {
 
     }
 
-    private Position scanId(Position p) throws InterruptedException {
+    private EtoroPosition scanId(EtoroPosition p) throws InterruptedException {
         authorizedDriver.navigate().to("https://www.etoro.com/portfolio/" + p.getName() + "/");
         Thread.sleep(1000);
         authorizedDriver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-head/b")).click();
@@ -126,6 +126,7 @@ public class EtoroOrderExecuter {
             Thread.sleep(500);
             if(id.equalsIgnoreCase(currentId)) {
                 authorizedDriver.findElement(By.className("e-btn-big")).click();
+                log.info("closed " + id);
                 return true;
             }
             authorizedDriver.findElement(By.className("w-share-header-nav-button-x")).click();

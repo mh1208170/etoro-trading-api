@@ -1,5 +1,6 @@
 package learn.monitoring.zuulu;
 
+import learn.monitoring.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ZuluPosition {
+public class ZuluPosition implements Position {
+
     private String id;
     private String currencyName;
     private String tradeType;

@@ -1,5 +1,6 @@
 package learn.monitoring.etoro;
 
+import learn.monitoring.Portfolio;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +13,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Portfolio {
+public class EtoroPortfolio implements Portfolio {
 
     private String type = "real";
 
-    private List<PositionGroup> positionGroups = new ArrayList<>();
+    private List<EtoroPositionGroup> positionGroups = new ArrayList<>();
 
-    public void addPositionGroup(PositionGroup p) {
+    public void addPositionGroup(EtoroPositionGroup p) {
         positionGroups.add(p);
     }
     @Override
