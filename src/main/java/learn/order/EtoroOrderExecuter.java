@@ -55,9 +55,6 @@ public class EtoroOrderExecuter {
         authorizedDriver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/market/div/div/div[2]/trade-button/div")).click();
         Thread.sleep(1500);
 
-
-
-
             List<WebElement> sellBuyBtns = authorizedDriver.findElements(By.className("execution-head-button"));
             if (o.getType().equalsIgnoreCase("sell")) {
                 sellBuyBtns.get(0).click();

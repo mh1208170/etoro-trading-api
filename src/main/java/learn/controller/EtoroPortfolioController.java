@@ -2,7 +2,7 @@ package learn.controller;
 
 
 import learn.monitoring.etoro.Portfolio;
-import learn.monitoring.etoro.EtoroPortfolioScanner;
+import learn.monitoring.etoro.EtoroPortfolioMonitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EtoroPortfolioController {
 
     @Autowired
-    private EtoroPortfolioScanner scanner;
+    private EtoroPortfolioMonitor scanner;
 
 
     @RequestMapping(value = "/portfolio/{trader}", method = RequestMethod.GET)

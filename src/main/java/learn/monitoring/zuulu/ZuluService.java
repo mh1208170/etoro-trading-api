@@ -24,4 +24,7 @@ public class ZuluService {
     }
 
 
+    public void addPortfolio(ZuluPortfolio p) {
+        portfolioRepository.save(p);
+    }
 }
