@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
@@ -15,7 +15,7 @@ public class ZuluPortfolio implements Portfolio {
 
     private String id;
 
-    Map<String, ZuluPosition> positionsMap = new HashMap<>();
+    Map<String, ZuluPosition> positionsMap = new ConcurrentHashMap<>();
 
     public ZuluPortfolio(String id) {
         this.id = id;

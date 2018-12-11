@@ -46,6 +46,7 @@ public class TradeUnitService {
     }
 
     public boolean canAddPosition() {
-        return repository.findAll().get(0).getCurrentUnitsCount() < MAX_UNITS_COUNT;
+        return true;
+        //return repository.findAll().get(0).getCurrentUnitsCount() < MAX_UNITS_COUNT;
     }
 }

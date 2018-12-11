@@ -113,7 +113,6 @@ public class EtoroOrderExecuter {
     }
 
     public boolean closePositionById(String id, String name) throws InterruptedException {
-        id = "#" + id;
         authorizedDriver.navigate().to("https://www.etoro.com/portfolio/" + name + "/");
         Thread.sleep(2000);
         List<WebElement> positions = authorizedDriver.findElements(By.className("ui-table-row"));
