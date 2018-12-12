@@ -23,6 +23,8 @@ public class Config {
         String pathToChrome;
         if (System.getProperty("os.name").startsWith("Mac")) {
             pathToChrome = "drivers/mac/chromedriver";
+        } else if(System.getProperty("os.name").toLowerCase().contains("windows")){
+            pathToChrome = "drivers/windows/chromedriver.exe";
         } else {
             pathToChrome = "drivers/ubuntu/chromedriver";
         }

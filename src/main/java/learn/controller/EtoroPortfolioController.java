@@ -1,7 +1,6 @@
 package learn.controller;
 
 
-import learn.monitoring.etoro.EtoroPortfolio;
 import learn.monitoring.etoro.EtoroPortfolioMonitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +17,8 @@ public class EtoroPortfolioController {
 
 
     @RequestMapping(value = "/portfolio/{trader}", method = RequestMethod.GET)
-    public EtoroPortfolio getPortfolioInfo(@PathVariable("trader") String trader) throws InterruptedException {
-        return scanner.getPortfolio("people/" + trader +"/portfolio");
+    public String getPortfolioInfo(@PathVariable("trader") String trader) throws InterruptedException {
+        return scanner.getPortfolio(trader);
     }
 
 

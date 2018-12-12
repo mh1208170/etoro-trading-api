@@ -15,13 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class EtoroPortfolio implements Portfolio {
 
+    String id;
+
     private String type = "real";
 
-    private List<EtoroPositionGroup> positionGroups = new ArrayList<>();
+    private List<EtoroPosition> positionGroups = new ArrayList<>();
 
-    public void addPositionGroup(EtoroPositionGroup p) {
-        positionGroups.add(p);
-    }
     @Override
     public String toString() {
         StringBuilder presentation = new StringBuilder();

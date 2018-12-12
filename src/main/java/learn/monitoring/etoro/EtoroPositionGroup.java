@@ -15,10 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 public class EtoroPositionGroup {
 
+    private String instrumentId;
     private String name;
     private String type;
-    private BigDecimal invested;
-    private BigDecimal profitPr;
+
 
     private List<EtoroPosition> positions = new ArrayList<>();
 
@@ -27,13 +27,13 @@ public class EtoroPositionGroup {
     }
 
     public void parseInfo(String info) {
-        String split[] =info.split("\n");
-        this.setName(split[0]);
-        String type = (split[1].startsWith("Buying")) ? "buy": "sell";
-        this.setType(type);
-        String valueSplit[] = split[1].replaceAll("(Selling|Buying)", "").split("%");
-        this.setInvested(new BigDecimal( valueSplit[1]));
-        this.setProfitPr(new BigDecimal(valueSplit[2]));
+//        String split[] =info.split("\n");
+//        this.setName(split[0]);
+//        String type = (split[1].startsWith("Buying")) ? "buy": "sell";
+//        this.setType(type);
+//        String valueSplit[] = split[1].replaceAll("(Selling|Buying)", "").split("%");
+//        this.setInvested(new BigDecimal( valueSplit[1]));
+//        this.setProfitPr(new BigDecimal(valueSplit[2]));
     }
 
     @Override

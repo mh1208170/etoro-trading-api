@@ -3,6 +3,9 @@ package learn.monitoring.etoro;
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -22,41 +27,48 @@ public class EtoroPortfolioMonitor implements Monitor {
     public EtoroPortfolioMonitor(WebDriver driver) {
         this.driver = driver;
         this.url = "https://www.etoro.com/";
+
     }
 
     private String url;
+
+    @PostConstruct
+    public void init() {
+        driver.get(url);
+    }
 
     @Override
     //@Scheduled(fixedRate = 60000, initialDelay = 5000)
     public void scan() throws InterruptedException {
         log.info("scaning etoro");
-        log.info(getPortfolio("people/aimstrader/portfolio").toString());
+//        log.info(getPortfolio("people/aimstrader/portfolio").toString());
     }
 
-    public EtoroPortfolio getPortfolio(String trader) throws InterruptedException {
-        driver.get(this.url + trader);
+    public String getPortfolio(String traderId) throws InterruptedException {
+        driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/portfolios?cid=%s&format=json", traderId));
+
+        String pageSrc = driver.getPageSource();
+        log.info("Portfolio: " + pageSrc);
+        JSONObject res = new JSONObject( Jsoup.parse(pageSrc).body().text());
         EtoroPortfolio portfolio = new EtoroPortfolio();
-        Thread.sleep(1000);
-        List<WebElement> els =  driver.findElements(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div/ui-table/ui-table-body/a"));
-        for(int j = 0; j < els.size(); j++) {
-            EtoroPositionGroup pg =  new EtoroPositionGroup();
-            WebElement pgEl = driver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div/ui-table/ui-table-body/a[" + (j + 1) + "]"));
-            pg.parseInfo(pgEl.getText());
-            pgEl.click();
-            Thread.sleep(300);
-            List<WebElement> posEls = driver.findElements(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div[2]/div/ui-table/ui-table-body/div"));
-            for(int i = 1; i < posEls.size(); i++) {
-                EtoroPosition p = new EtoroPosition();
-                //WebElement pEl = posEls.get(i);
-                WebElement pEl = driver.findElement(By.xpath("/html/body/ui-layout/div/div/div[2]/div/tabs/div[3]/tabscontent/tab[3]/div/div/div/div/div/div/div[2]/div[2]/div/ui-table/ui-table-body/div["+(i+1) + "]"));
-                p.parseInfo(pEl.getText());
-                pg.addPosition(p);
-            }
-            portfolio.addPositionGroup(pg);
-            driver.navigate().back();
-            Thread.sleep(300);
-        }
-        return portfolio;
+        portfolio.setId(traderId);
+        JSONArray groups = res.getJSONArray("AggregatedPositions");
+        List<EtoroPosition> positions = new ArrayList<>();
+        groups.forEach(g -> {
+            JSONObject groupObj = (JSONObject)g;
+            String instId = "" + groupObj.get("InstrumentID");
+            driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/positions?InstrumentID=%s&cid=3314694&format=json", instId, traderId));
+            JSONObject posJson = new JSONObject( Jsoup.parse( driver.getPageSource()).body().text());
+            JSONArray posArray = posJson.getJSONArray("PublicPositions");
+            posArray.forEach(pos -> {
+                EtoroPosition posObj = new EtoroPosition();
+                posObj.setInstrumentId(((JSONObject)pos).getString("id"));
+               // posObj.setAmmount(((JSONObject)pos).getString("id"));
+            });
+
+        });
+
+        return "";
     }
 
     @Override

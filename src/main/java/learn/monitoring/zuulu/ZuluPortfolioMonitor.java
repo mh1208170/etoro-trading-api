@@ -69,7 +69,7 @@ public class ZuluPortfolioMonitor implements Monitor {
             });
 
             newPos.forEach(pos -> {
-                log.info("check to add " + pos);
+
                 if(!p.getPositionsMap().containsKey(pos.getId()) && tradeUnitService.canAddPosition() && pos.getEtoroRef() == null && !ignoreList.contains(pos.getCurrencyName())) {
                     log.info("adding to list " + pos);
                     idsToAdd.add(pos);
