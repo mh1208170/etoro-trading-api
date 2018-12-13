@@ -27,6 +27,11 @@ public class EtoroOrderExecuter {
 
     public void setMode(String mode) throws InterruptedException {
         Thread.sleep(5000);
+        try {
+            authorizedDriver.findElement(By.xpath("/html/body/div[4]/div/div[1]/div/div[4]")).click();
+        } catch (Throwable t) {
+            log.warn("not popup found!");
+        }
         int pos = 2;
         switch (mode) {
             case "real":
