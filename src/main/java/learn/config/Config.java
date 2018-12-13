@@ -25,6 +25,7 @@ public class Config {
             pathToChrome = "drivers/mac/chromedriver";
         } else if(System.getProperty("os.name").toLowerCase().contains("windows")){
             pathToChrome = "drivers/windows/chromedriver.exe";
+            opt.setBinary("C:\\Users\\oleg\\chrome\\chrome");
         } else {
             pathToChrome = "drivers/ubuntu/chromedriver";
         }
