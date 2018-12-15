@@ -83,9 +83,9 @@ public class EtoroOrderExecuter {
             Thread.sleep(2000);
             authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[4]/div/button")).click();
 
-        while (true) {
+        for(int i = 0; i < 5; i++) {
             try {
-                //save to database
+                //trying scan id from positions, 5 attempts than close app.
                 EtoroPosition res = new EtoroPosition();
                 res.setName(o.getName());
                 res.setAmmount(o.getValue());
@@ -94,10 +94,10 @@ public class EtoroOrderExecuter {
                 return res;
             } catch (Throwable t) {
                 t.printStackTrace();
-                log.error("Was unable to scan position id: trying again");
+                log.error("Was unable to scan position id: trying again, attempt# {}", i);
             }
         }
-
+        throw new RuntimeException("Was unable scaning positions ID, ending application to prevent duplications!");
 
     }
 

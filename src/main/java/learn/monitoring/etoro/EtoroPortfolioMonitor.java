@@ -2,6 +2,7 @@ package learn.monitoring.etoro;
 
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
+import learn.monitoring.zuulu.ZuluPortfolio;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,6 +24,9 @@ public class EtoroPortfolioMonitor implements Monitor {
     @Autowired
     WebDriver driver;
 
+    @Autowired
+    EtoroPortfolioRepository portfolioRepository;
+
     public EtoroPortfolioMonitor(WebDriver driver) {
         this.driver = driver;
         this.url = "https://www.etoro.com/";
@@ -33,12 +37,17 @@ public class EtoroPortfolioMonitor implements Monitor {
     @PostConstruct
     public void init() {
         driver.get(url);
+        if(portfolioRepository.findAll().size() == 0) {
+            portfolioRepository.save(new ZuluPortfolio("6106336"));
+        }
+        log.info("started etoro positions monitoring");
     }
 
     @Override
     //@Scheduled(fixedRate = 60000, initialDelay = 5000)
     public void scan() throws InterruptedException {
         log.info("scaning etoro");
+
     }
 
     public EtoroPortfolio getPortfolio(String traderId) throws InterruptedException {
@@ -63,6 +72,8 @@ public class EtoroPortfolioMonitor implements Monitor {
                 posObj.setPosId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
                 posObj.setInstrumentId("" + ((JSONObject)pos).get("InstrumentID"));
                 posObj.setAmmount(new BigDecimal(String.valueOf(((JSONObject)pos).get("Amount"))));
+                String type = ("" +((JSONObject)pos).get("isBuy")).equals("true") ? "buy" : "sell";
+                posObj.setType(type);
                 posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
 
                 String s=String.valueOf(((JSONObject)pos).get("OpenDateTime"));

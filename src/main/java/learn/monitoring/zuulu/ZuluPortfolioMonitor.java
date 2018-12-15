@@ -44,7 +44,6 @@ public class ZuluPortfolioMonitor implements Monitor {
             portfolioRepository.save(new ZuluPortfolio("364967"));
             portfolioRepository.save(new ZuluPortfolio("371076"));
             portfolioRepository.save(new ZuluPortfolio("352381"));
-
         }
         log.info("started zulu position monitoring");
 
@@ -136,7 +135,7 @@ public class ZuluPortfolioMonitor implements Monitor {
             executer.closePositionById(p.getEtoroRef(), p.getCurrencyName().replace("/",""));
             log.info("deleted " + p.getId());
         } else {
-            log.info("Position: tr{} {} {} {} {} was never opened on etoro",trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
+            log.info("Position: tr{} {} {} {} {} was never opened on etoro...",trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         }
     }
 
