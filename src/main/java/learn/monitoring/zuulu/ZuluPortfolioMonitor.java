@@ -48,9 +48,10 @@ public class ZuluPortfolioMonitor implements Monitor {
         if(portfolioRepository.findAll().size() == 0) {
             portfolioRepository.save(new ZuluPortfolio("369739"));
             portfolioRepository.save(new ZuluPortfolio("369854"));
+            portfolioRepository.save(new ZuluPortfolio("364967"));
             portfolioRepository.save(new ZuluPortfolio("371076"));
             portfolioRepository.save(new ZuluPortfolio("352381"));
-            portfolioRepository.save(new ZuluPortfolio("292620"));
+
         }
         log.info("started zulu position monitoring");
 

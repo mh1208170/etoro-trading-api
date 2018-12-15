@@ -2,16 +2,12 @@ package learn.monitoring.etoro;
 
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
-import learn.monitoring.zuulu.ZuluPosition;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -43,7 +39,6 @@ public class EtoroPortfolioMonitor implements Monitor {
     //@Scheduled(fixedRate = 60000, initialDelay = 5000)
     public void scan() throws InterruptedException {
         log.info("scaning etoro");
-//        log.info(getPortfolio("people/aimstrader/portfolio").toString());
     }
 
     public EtoroPortfolio getPortfolio(String traderId) throws InterruptedException {
