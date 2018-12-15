@@ -1,0 +1,39 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] [trace:%X{X-B3-TraceId:-}] %highlight(%-5level) %40.40logger{36}.%-20.30M \(%-3line\) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>etorobot.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>etorobot.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] [trace:%X{X-B3-TraceId:-}] %highlight(%-5level) %40.40logger{36}.%-20.30M \(%-3line\) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="DEBUG"/>-->
+    <logger name="learn" level="DEBUG"/>
+
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
+
+
+
+        <!-- %X{X-B3-SpanId:-},%X{X-Span-Export:-}] -->

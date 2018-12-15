@@ -1,5 +1,8 @@
-spring:
-   data:
-    mongodb:
-      uri: mongodb://oleg:J63vwCJGCkTwqngLF7G91WvD5a03hLYVA9d24fMfKH5Jlxt2NLGGaoEiO8bfZ9tb9wQPAnbrRd2mu2S3uGDTdg==@oleg.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
-      database: oleg
+
+  spring:
+    profiles: azure
+    data:
+      mongodb:
+        uri: mongodb://oleg:J63vwCJGCkTwqngLF7G91WvD5a03hLYVA9d24fMfKH5Jlxt2NLGGaoEiO8bfZ9tb9wQPAnbrRd2mu2S3uGDTdg==@oleg.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
+        database: oleg
+

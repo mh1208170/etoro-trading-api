@@ -94,7 +94,7 @@ public class EtoroOrderExecuter {
                 return res;
             } catch (Throwable t) {
                 t.printStackTrace();
-                return null;
+                log.error("Was unable to scan position id: trying again");
             }
         }
 

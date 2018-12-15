@@ -2,6 +2,7 @@ package learn.monitoring.etoro;
 
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
+import learn.monitoring.zuulu.ZuluPosition;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -53,7 +56,7 @@ public class EtoroPortfolioMonitor implements Monitor {
         EtoroPortfolio portfolio = new EtoroPortfolio();
         portfolio.setId(traderId);
         JSONArray groups = res.getJSONArray("AggregatedPositions");
-        List<EtoroPosition> positions = new ArrayList<>();
+        List<EtoroPosition> newPositions = new ArrayList<>();
         groups.forEach(g -> {
             JSONObject groupObj = (JSONObject)g;
             String instId = "" + groupObj.get("InstrumentID");
@@ -62,8 +65,9 @@ public class EtoroPortfolioMonitor implements Monitor {
             JSONArray posArray = posJson.getJSONArray("PublicPositions");
             posArray.forEach(pos -> {
                 EtoroPosition posObj = new EtoroPosition();
-                posObj.setInstrumentId(((JSONObject)pos).getString("id"));
-               // posObj.setAmmount(((JSONObject)pos).getString("id"));
+                posObj.setInstrumentId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
+                newPositions.add(posObj);
+                // posObj.setAmmount(((JSONObject)pos).getString("id"));
             });
 
         });

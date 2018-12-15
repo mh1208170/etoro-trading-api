@@ -36,6 +36,10 @@ public class ZuluPortfolioMonitor implements Monitor {
     @Autowired
     private TradeUnitService tradeUnitService;
 
+    Map<String, ZuluPosition> recentlyAdded = new HashMap<>();
+
+    Map<String, ZuluPosition> recentlyRemoved = new HashMap<>();
+
     private Set<String> ignoreList = new HashSet<>();
 
     @PostConstruct
@@ -47,30 +51,35 @@ public class ZuluPortfolioMonitor implements Monitor {
             portfolioRepository.save(new ZuluPortfolio("371076"));
             portfolioRepository.save(new ZuluPortfolio("352381"));
             portfolioRepository.save(new ZuluPortfolio("292620"));
-
         }
+        log.info("started zulu position monitoring");
 
     }
 
     public void getTraderPositions() {
-        log.info("monitoring...");
+
         List<ZuluPortfolio> portfolios = portfolioRepository.findAll();
 
         for(int i = 0; i < portfolios.size(); i++) {
             List<ZuluPosition> idsToAdd = new ArrayList<>();
             List<ZuluPosition> idsToRemove = new ArrayList<>();
             ZuluPortfolio p = portfolios.get(i);
-            List<ZuluPosition> newPos = zuluService.scanPositions(p.getId());
+            List<ZuluPosition> newPos = new ArrayList<>();
+            try {
+               newPos.addAll(zuluService.scanPositions(p.getId()));
+            } catch (Exception e) {
+                log.warn("Could not connect to zulu!!!");
+            }
             p.getPositionsMap().forEach((k,v) -> {
                 if(!newPos.contains(v)) {
-//                    p.getPositionsMap().remove(k);
                     idsToRemove.add(v);
                 }
             });
 
             newPos.forEach(pos -> {
 
-                if(!p.getPositionsMap().containsKey(pos.getId()) && tradeUnitService.canAddPosition() && pos.getEtoroRef() == null && !ignoreList.contains(pos.getCurrencyName())) {
+                if(!p.getPositionsMap().containsKey(pos.getId()) && tradeUnitService.canAddPosition() &&
+                        pos.getEtoroRef() == null && !ignoreList.contains(pos.getCurrencyName()) ) {
                     log.info("adding to list " + pos);
                     idsToAdd.add(pos);
                 }
@@ -100,38 +109,6 @@ public class ZuluPortfolioMonitor implements Monitor {
             });
             portfolioRepository.save(p);
         }
-
-
-
-//        portfolioRepository.findAll().forEach(p -> {
-//            List<ZuluPosition> newPos = zuluService.scanPositions(p.getId());
-//            p.getPositionsMap().forEach((k,v) -> {
-//                if(!newPos.contains(v)) {
-//                    p.getPositionsMap().remove(k);
-//                    try {
-//                        onClosePosition(v, p.getId());
-//                        tradeUnitService.removePositionFromCounter();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            });
-//
-//            newPos.forEach(pos -> {
-//                if(!p.getPositionsMap().containsKey(pos.getId()) && tradeUnitService.canAddPosition()) {
-//                    p.getPositionsMap().put(pos.getId(), pos);
-//                    try {
-//                        onOpenNewPosition(pos, p.getId());
-//                        tradeUnitService.addPositionToCounter();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-
-////            log.info("saved portfolio from: " + p.getId());
-//        });
 
     }
 
