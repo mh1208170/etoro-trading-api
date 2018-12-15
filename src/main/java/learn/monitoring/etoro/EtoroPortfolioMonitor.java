@@ -38,7 +38,7 @@ public class EtoroPortfolioMonitor implements Monitor {
     public void init() {
         driver.get(url);
         if(portfolioRepository.findAll().size() == 0) {
-            portfolioRepository.save(new ZuluPortfolio("6106336"));
+            portfolioRepository.save(new EtoroPortfolio("6106336"));
         }
         log.info("started etoro positions monitoring");
     }
@@ -95,6 +95,7 @@ public class EtoroPortfolioMonitor implements Monitor {
 
         });
         portfolio.setPositionGroups(newPositions);
+        portfolioRepository.save(portfolio);
         return portfolio;
     }
 

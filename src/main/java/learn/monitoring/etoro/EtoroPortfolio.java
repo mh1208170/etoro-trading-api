@@ -20,6 +20,10 @@ public class EtoroPortfolio implements Portfolio {
 
     private List<EtoroPosition> positionGroups = new ArrayList<>();
 
+    public EtoroPortfolio(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         StringBuilder presentation = new StringBuilder();
