@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -30,7 +30,6 @@ public class EtoroPortfolioMonitor implements Monitor {
     public EtoroPortfolioMonitor(WebDriver driver) {
         this.driver = driver;
         this.url = "https://www.etoro.com/";
-
     }
 
     private String url;
@@ -47,7 +46,7 @@ public class EtoroPortfolioMonitor implements Monitor {
 //        log.info(getPortfolio("people/aimstrader/portfolio").toString());
     }
 
-    public String getPortfolio(String traderId) throws InterruptedException {
+    public EtoroPortfolio getPortfolio(String traderId) throws InterruptedException {
         driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/portfolios?cid=%s&format=json", traderId));
 
         String pageSrc = driver.getPageSource();
@@ -60,19 +59,37 @@ public class EtoroPortfolioMonitor implements Monitor {
         groups.forEach(g -> {
             JSONObject groupObj = (JSONObject)g;
             String instId = "" + groupObj.get("InstrumentID");
-            driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/positions?InstrumentID=%s&cid=3314694&format=json", instId, traderId));
+            driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/positions?InstrumentID=%s&cid=%s&format=json", instId, traderId));
             JSONObject posJson = new JSONObject( Jsoup.parse( driver.getPageSource()).body().text());
             JSONArray posArray = posJson.getJSONArray("PublicPositions");
             posArray.forEach(pos -> {
                 EtoroPosition posObj = new EtoroPosition();
-                posObj.setInstrumentId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
+
+                posObj.setPosId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
+                posObj.setInstrumentId("" + ((JSONObject)pos).get("InstrumentID"));
+                posObj.setAmmount(new BigDecimal(String.valueOf(((JSONObject)pos).get("Amount"))));
+                posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
+
+                String s=String.valueOf(((JSONObject)pos).get("OpenDateTime"));
+
+                TimeZone tz = TimeZone.getDefault();
+                Calendar cal = Calendar.getInstance(tz);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                sdf.setCalendar(cal);
+                try {
+                    cal.setTime(sdf.parse(s));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Date date = cal.getTime();
+                posObj.setOpenTime(date);
                 newPositions.add(posObj);
                 // posObj.setAmmount(((JSONObject)pos).getString("id"));
             });
 
         });
-
-        return "";
+        portfolio.setPositionGroups(newPositions);
+        return portfolio;
     }
 
     @Override

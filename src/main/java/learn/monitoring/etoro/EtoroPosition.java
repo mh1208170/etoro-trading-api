@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Getter
@@ -22,25 +20,10 @@ public class EtoroPosition {
     String instrumentId;
     BigDecimal ammount;
     String leverage;
-    LocalDateTime openTime;
-    LocalDateTime lastUpdated;
+    Date openTime;
     BigDecimal sl;
     BigDecimal tp;
-    Date milisOpen;
 
-
-    public void parseInfo(String info) {
-//        String split[] = info.split("\n");
-//        String nameSplit[] = split[0].split(" ");
-//        this.setName(nameSplit[1]);
-//        this.setType(nameSplit[0]);
-//        this.setOpenTime(LocalDateTime.parse(split[1], DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-//        String valueSplit[] = split[2].split(" ");
-//        this.setAmmount(new BigDecimal(valueSplit[0].replaceAll("%", "")));
-//        this.setLeverage(valueSplit[1]);
-//        this.setProfitPr(new BigDecimal(valueSplit[5].replaceAll("%", "")));
-
-    }
 
     @Override
     public String toString() {
