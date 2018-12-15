@@ -72,7 +72,7 @@ public class EtoroPortfolioMonitor implements Monitor {
                 posObj.setPosId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
                 posObj.setInstrumentId("" + ((JSONObject)pos).get("InstrumentID"));
                 posObj.setAmmount(new BigDecimal(String.valueOf(((JSONObject)pos).get("Amount"))));
-                String type = ("" +((JSONObject)pos).get("isBuy")).equals("true") ? "buy" : "sell";
+                String type = ("" +((JSONObject)pos).get("IsBuy")).equals("true") ? "buy" : "sell";
                 posObj.setType(type);
                 posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
 
