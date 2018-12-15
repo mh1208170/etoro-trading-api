@@ -31,14 +31,7 @@ public class ZuluPortfolioMonitor implements Monitor {
     private ZuluPortfolioRepository portfolioRepository;
 
     @Autowired
-    private ZuluPositionRepository positionRepository;
-
-    @Autowired
     private TradeUnitService tradeUnitService;
-
-    Map<String, ZuluPosition> recentlyAdded = new HashMap<>();
-
-    Map<String, ZuluPosition> recentlyRemoved = new HashMap<>();
 
     private Set<String> ignoreList = new HashSet<>();
 
@@ -149,12 +142,6 @@ public class ZuluPortfolioMonitor implements Monitor {
 
     //TODO remove mocked position name
     public static Order transformToOrder(ZuluPosition zp) {
-//        Order o = new Order();
-//        o.setValue(new BigDecimal(1000d * zp.getStdLotds()));
-//        o.setName(zp.getCurrencyName().replace("/", ""));
-//        o.setLeverage(30);
-//        o.setType(zp.getTradeType());
-//        return o;
         Order o = new Order();
         o.setValue(new BigDecimal(140));
         o.setName(zp.getCurrencyName().replace("/",""));

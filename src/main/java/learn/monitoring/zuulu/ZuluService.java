@@ -17,7 +17,7 @@ public class ZuluService {
 
     public List<ZuluPosition> scanPositions(String id) {
         List<ZuluPosition> res = client.getOpenPositions(id).stream().map(zp -> {
-            zp.setId(id + ":" + zp.getStdLotds() + ":" + zp.getDateTime().getTime());
+            zp.setId(id + ":" + zp.getStdLotds().toString().replaceAll("\\.", "") + ":" + zp.getDateTime().getTime());
             return zp;
         }).collect(Collectors.toList());
         return res;
