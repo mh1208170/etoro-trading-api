@@ -62,6 +62,7 @@ public class ZuluPortfolioMonitor implements Monitor {
                newPos.addAll(zuluService.scanPositions(p.getId()));
             } catch (Exception e) {
                 log.warn("Could not connect to zulu!!!");
+                return;
             }
             p.getPositionsMap().forEach((k,v) -> {
                 if(!newPos.contains(v)) {
