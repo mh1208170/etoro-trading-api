@@ -3,6 +3,7 @@ package learn.monitoring.etoro;
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
 import learn.monitoring.zuulu.ZuluPortfolio;
+import learn.user.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +28,9 @@ public class EtoroPortfolioMonitor implements Monitor {
     @Autowired
     EtoroPortfolioRepository portfolioRepository;
 
+    @Autowired
+    HistoryService historyService;
+
     public EtoroPortfolioMonitor(WebDriver driver) {
         this.driver = driver;
         this.url = "https://www.etoro.com/";
@@ -39,6 +43,7 @@ public class EtoroPortfolioMonitor implements Monitor {
         driver.get(url);
         if(portfolioRepository.findAll().size() == 0) {
             portfolioRepository.save(new EtoroPortfolio("6106336"));
+
         }
         log.info("started etoro positions monitoring");
     }

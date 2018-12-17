@@ -7,6 +7,7 @@ import learn.monitoring.etoro.EtoroPosition;
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
 import learn.units.TradeUnitService;
+import learn.user.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,6 +33,9 @@ public class ZuluPortfolioMonitor implements Monitor {
 
     @Autowired
     private TradeUnitService tradeUnitService;
+
+    @Autowired
+    private HistoryService historyService;
 
     private Set<String> ignoreList = new HashSet<>();
 
@@ -64,6 +68,7 @@ public class ZuluPortfolioMonitor implements Monitor {
                 log.warn("Could not connect to zulu!!!");
                 return;
             }
+
             p.getPositionsMap().forEach((k,v) -> {
                 if(!newPos.contains(v)) {
                     idsToRemove.add(v);
@@ -80,10 +85,11 @@ public class ZuluPortfolioMonitor implements Monitor {
             });
 
             idsToRemove.forEach(pos -> {
-                p.getPositionsMap().remove(pos.getId());
                 try {
                     onClosePosition(pos, pos.getId());
+                    p.getPositionsMap().remove(pos.getId());
                     tradeUnitService.removePositionFromCounter();
+                    historyService.addZuluPosition(pos);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
