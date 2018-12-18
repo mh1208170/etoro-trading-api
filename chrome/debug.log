@@ -1,0 +1,25 @@
+[1213/002446.526:ERROR:process_info.cc(625)] range at 0x24f041b800000000, size 0x24e fully unreadable
+[1213/002446.527:ERROR:process_info.cc(625)] range at 0x24f0421c00000000, size 0x24e fully unreadable
+[1213/002446.527:ERROR:process_info.cc(625)] range at 0x0, size 0x24e fully unreadable
+[1213/002446.860:ERROR:process_info.cc(625)] range at 0x832b3b3000000000, size 0x17f fully unreadable
+[1213/002446.860:ERROR:process_info.cc(625)] range at 0x832b3b5000000000, size 0x17f fully unreadable
+[1213/002446.860:ERROR:process_info.cc(625)] range at 0x0, size 0x17f fully unreadable
+[1213/002446.895:ERROR:process_info.cc(373)] UncheckedAllocate
+[1213/002517.487:ERROR:registration_protocol_win.cc(55)] CreateFile: The system cannot find the file specified. (0x2)
+[1213/002849.470:ERROR:registration_protocol_win.cc(55)] CreateFile: The system cannot find the file specified. (0x2)
+[1213/003041.369:ERROR:process_info.cc(625)] range at 0x8d443b2e00000000, size 0x26d fully unreadable
+[1213/003041.370:ERROR:process_info.cc(625)] range at 0x8d443b4e00000000, size 0x26d fully unreadable
+[1213/003041.370:ERROR:process_info.cc(625)] range at 0x0, size 0x26d fully unreadable
+[1213/003041.415:ERROR:process_info.cc(373)] UncheckedAllocate
+[1213/003057.847:ERROR:process_info.cc(625)] range at 0xca2f41b600000000, size 0x2b0 fully unreadable
+[1213/003057.847:ERROR:process_info.cc(625)] range at 0xca2f421a00000000, size 0x2b0 fully unreadable
+[1213/003057.847:ERROR:process_info.cc(625)] range at 0x0, size 0x2b0 fully unreadable
+[1213/003057.869:ERROR:process_info.cc(373)] UncheckedAllocate
+[1213/195005.738:ERROR:process_info.cc(625)] range at 0x2dbe41e800000000, size 0x1dd fully unreadable
+[1213/195005.740:ERROR:process_info.cc(625)] range at 0x2dbe424800000000, size 0x1dd fully unreadable
+[1213/195005.740:ERROR:process_info.cc(625)] range at 0x0, size 0x1dd fully unreadable
+[1213/195018.880:ERROR:registration_protocol_win.cc(55)] CreateFile: The system cannot find the file specified. (0x2)
+[1213/195256.473:ERROR:process_info.cc(625)] range at 0xdc9541e800000000, size 0x12e fully unreadable
+[1213/195256.474:ERROR:process_info.cc(625)] range at 0xdc95424c00000000, size 0x12e fully unreadable
+[1213/195256.474:ERROR:process_info.cc(625)] range at 0x0, size 0x12e fully unreadable
+[1213/195256.494:ERROR:process_info.cc(373)] UncheckedAllocate
