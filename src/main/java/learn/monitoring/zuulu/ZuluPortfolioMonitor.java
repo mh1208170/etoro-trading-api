@@ -50,7 +50,6 @@ public class ZuluPortfolioMonitor implements Monitor {
             portfolioRepository.save(new ZuluPortfolio("352381"));
         }
         log.info("started zulu position monitoring");
-
     }
 
     public void getTraderPositions() {
@@ -62,6 +61,7 @@ public class ZuluPortfolioMonitor implements Monitor {
             List<ZuluPosition> idsToRemove = new ArrayList<>();
             ZuluPortfolio p = portfolios.get(i);
             List<ZuluPosition> newPos = new ArrayList<>();
+
             try {
                newPos.addAll(zuluService.scanPositions(p.getId()));
             } catch (Exception e) {
