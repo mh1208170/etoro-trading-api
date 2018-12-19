@@ -2,10 +2,7 @@ package learn.order;
 
 import learn.monitoring.etoro.EtoroPosition;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,10 +36,6 @@ public class EtoroOrderExecuter {
                 break;
             case "virtual":
                 pos = 2;
-        }
-        try {
-        } catch (Exception e) {
-
         }
         authorizedDriver.findElement(By.className("inmplayer-popover-close-button")).click();
 
@@ -123,7 +116,17 @@ public class EtoroOrderExecuter {
         List<WebElement> positions = authorizedDriver.findElements(By.className("ui-table-row"));
         Thread.sleep(500);
         for(int i =1; i < positions.size(); i++) {
-            authorizedDriver.findElement(By.xpath(String.format("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-body/div[%d]/div[3]/ui-table-button-cell/div[2]",i))).click();
+            WebElement el = authorizedDriver.findElement(By.xpath(String.format("/html/body/ui-layout/div/div/div[2]/div/div[2]/span/ui-table/ui-table-body/div[%d]/div[3]/ui-table-button-cell/div[2]",i)));
+            try {
+                if(i > 10) {
+                    ((JavascriptExecutor) authorizedDriver).executeScript("arguments[0].scrollIntoView(true);", el);
+                    Thread.sleep(500);
+                }
+            } catch (Exception e) {
+                log.error("failed scroll to element!");
+            }
+
+            el.click();
             Thread.sleep(2000);
             String currentId = authorizedDriver.findElement(By.cssSelector("div.w-execution-main-head > div.w-sm-position-info-trade > div.w-sm-position-info-trade-value.ng-binding"))
                     .getText();
