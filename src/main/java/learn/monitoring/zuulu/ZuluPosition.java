@@ -20,6 +20,7 @@ public class ZuluPosition implements Position {
     private Date dateTime;
     private Double stdLotds;
     private String etoroRef;
+    private Double entryRate;
 
     @Override
     public int hashCode() {

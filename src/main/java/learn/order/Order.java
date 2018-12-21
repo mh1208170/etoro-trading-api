@@ -16,8 +16,7 @@ public class Order {
     private String name;
     private String type;
     private BigDecimal value;
-    private BigDecimal sl;
-    private BigDecimal tp;
+    private BigDecimal open;
     private Integer leverage;
 
 }

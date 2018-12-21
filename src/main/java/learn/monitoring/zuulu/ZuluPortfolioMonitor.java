@@ -104,7 +104,7 @@ public class ZuluPortfolioMonitor implements Monitor {
                     portfolioRepository.save(p);
                     tradeUnitService.addPositionToCounter();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    log.info(e.getMessage());
                 }
             });
             portfolioRepository.save(p);
@@ -149,6 +149,7 @@ public class ZuluPortfolioMonitor implements Monitor {
     //TODO remove mocked position name
     public static Order transformToOrder(ZuluPosition zp) {
         Order o = new Order();
+        o.setOpen(new BigDecimal(zp.getEntryRate()));
         o.setValue(new BigDecimal(140));
         o.setName(zp.getCurrencyName().replace("/",""));
         o.setLeverage(30);
