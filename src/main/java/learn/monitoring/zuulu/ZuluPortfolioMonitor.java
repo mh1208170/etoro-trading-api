@@ -139,8 +139,12 @@ public class ZuluPortfolioMonitor implements Monitor {
         ZuluPosition p = (ZuluPosition) pos;
         log.info("Closing position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         if (p.getEtoroRef() != null) {
-            executer.closePositionById(p.getEtoroRef(), p.getCurrencyName().replace("/",""));
-            log.info("deleted " + p.getId());
+            if(executer.closePositionById(p.getEtoroRef(), p.getCurrencyName().replace("/",""))) {
+                log.info("deleted " + p.getId());
+            } else {
+                throw new RuntimeException("could not closed position" + pos + " will try again")
+            }
+
         } else {
             log.info("Position: tr{} {} {} {} {} was never opened on etoro...",trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         }

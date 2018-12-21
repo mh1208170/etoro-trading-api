@@ -106,7 +106,7 @@ public class EtoroOrderExecuter {
         Thread.sleep(1000);
         String id = authorizedDriver.findElement(By.cssSelector("div.w-execution-main-head > div.w-sm-position-info-trade > div.w-sm-position-info-trade-value.ng-binding"))
                 .getText();
-        System.out.println("Order id ist: " + id);
+        log.info("Order id ist: " + id);
         p.setPosId(id);
         return p;
 
