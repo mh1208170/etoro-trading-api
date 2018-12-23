@@ -28,6 +28,8 @@ public class HistoryService {
         try {
             OrderHistory history = new OrderHistory();
 
+            history.setName(p.getCurrencyName());
+            history.setTraderId(p.getId());
             history.setClosed(new Date());
             history.setCopiedFrom("zulu");
             history.setType(p.getTradeType());
@@ -42,7 +44,7 @@ public class HistoryService {
             history.setClosePrice(new BigDecimal(parsedRow.get(3).text()));
 
             historyRepository.save(history);
-            log.info("story {} added!", history);
+            log.info("{} added!", history);
         } catch (Exception e) {
             log.error("could not add history for position: {}", p);
         }

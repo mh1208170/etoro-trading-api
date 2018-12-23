@@ -19,4 +19,15 @@ public class OrderHistory {
     private BigDecimal profitInUSD;
     private BigDecimal openPrice;
     private BigDecimal closePrice;
+    private String name;
+
+    @Override
+    public String toString() {
+        return String.format("History record %s %s %s", traderId, type, name);
+    }
+
+
+    public String getName() {
+        return name;
+    }
 }
