@@ -27,4 +27,12 @@ public class ZuluService {
     public void addPortfolio(ZuluPortfolio p) {
         portfolioRepository.save(p);
     }
+
+    public void deletePortfolio(ZuluPortfolio p) {
+        portfolioRepository.delete(p.getId());
+    }
+
+    public List<ZuluPortfolio> getPortfolios() {
+        return portfolioRepository.findAll();
+    }
 }
