@@ -43,11 +43,14 @@ public class ZuluPortfolioMonitor implements Monitor {
     public void initPortfolioRepository() {
         ignoreList.add("XAU/USD");
         if(portfolioRepository.findAll().size() == 0) {
-            portfolioRepository.save(new ZuluPortfolio("369739"));
+
             portfolioRepository.save(new ZuluPortfolio("369854"));
             portfolioRepository.save(new ZuluPortfolio("364967"));
             portfolioRepository.save(new ZuluPortfolio("371076"));
             portfolioRepository.save(new ZuluPortfolio("352381"));
+            portfolioRepository.save(new ZuluPortfolio("374478"));
+            portfolioRepository.save(new ZuluPortfolio("375788"));
+            portfolioRepository.save(new ZuluPortfolio("378004"));
         }
         log.info("started zulu position monitoring");
     }
@@ -98,11 +101,9 @@ public class ZuluPortfolioMonitor implements Monitor {
             idsToAdd.forEach(pos -> {
                 p.getPositionsMap().put(pos.getId(), pos);
                 try {
-                    //todo transaction
                     onOpenNewPosition(pos, pos.getId());
                     p.positionsMap.put(pos.getId(), pos);
                     portfolioRepository.save(p);
-                    tradeUnitService.addPositionToCounter();
                 } catch (InterruptedException e) {
                     log.info(e.getMessage());
                 }
@@ -126,6 +127,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         if((new Date().getTime() - p.getDateTime().getTime()) < 3 * 20 * 600000 && p.getEtoroRef() == null) {
             EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
             p.setEtoroRef(etoroP.getPosId());
+            tradeUnitService.addPositionToCounter();
             log.info("Opened " + p.getId());
         } else {
             log.info("Position: tr{} {} {} {} {} is too old to be open", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
@@ -140,8 +142,9 @@ public class ZuluPortfolioMonitor implements Monitor {
         log.info("Closing position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         if (p.getEtoroRef() != null) {
             if(executer.closePositionById(p.getEtoroRef(), p.getCurrencyName().replace("/",""))) {
-                log.info("deleted " + p.getId());
+                log.info("Closed position: tr{} {} {} {} {}",trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
             } else {
+                log.error("error while opening pos: {}", pos);
                 throw new RuntimeException("could not closed position" + pos + " will try again");
             }
 
@@ -151,7 +154,7 @@ public class ZuluPortfolioMonitor implements Monitor {
     }
 
     //TODO remove mocked position name
-    public static Order transformToOrder(ZuluPosition zp) {
+    public  Order transformToOrder(ZuluPosition zp) {
         Order o = new Order();
         o.setOpen(new BigDecimal(zp.getEntryRate()));
         o.setValue(new BigDecimal(140));

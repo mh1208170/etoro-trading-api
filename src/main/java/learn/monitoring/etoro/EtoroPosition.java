@@ -1,5 +1,6 @@
 package learn.monitoring.etoro;
 
+import learn.monitoring.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class EtoroPosition {
+public class EtoroPosition implements Position {
 
     String posId;
     String type;
@@ -23,6 +24,7 @@ public class EtoroPosition {
     Date openTime;
     BigDecimal sl;
     BigDecimal tp;
+    String etoroRef;
 
 
     @Override

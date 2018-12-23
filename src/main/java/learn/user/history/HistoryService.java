@@ -1,5 +1,6 @@
 package learn.user.history;
 
+import learn.monitoring.etoro.EtoroPosition;
 import learn.monitoring.zuulu.ZuluPosition;
 import learn.user.OrderHistory;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +51,9 @@ public class HistoryService {
 
     public List<OrderHistory> getHistory() {
         return historyRepository.findAll();
+    }
+
+    public void addEtoroPosition(EtoroPosition pos) {
+
     }
 }

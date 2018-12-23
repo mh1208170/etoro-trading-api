@@ -2,21 +2,21 @@ package learn.monitoring.etoro;
 
 import learn.monitoring.Monitor;
 import learn.monitoring.Position;
-import learn.monitoring.zuulu.ZuluPortfolio;
+import learn.order.EtoroOrderExecuter;
+import learn.order.Order;
+import learn.units.TradeUnitService;
 import learn.user.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 @Component
 @Slf4j
@@ -26,22 +26,33 @@ public class EtoroPortfolioMonitor implements Monitor {
     WebDriver driver;
 
     @Autowired
-    EtoroPortfolioRepository portfolioRepository;
+    EtoroOrderExecuter executer;
 
     @Autowired
-    HistoryService historyService;
+    private EtoroPortfolioRepository portfolioRepository;
 
-    public EtoroPortfolioMonitor(WebDriver driver) {
-        this.driver = driver;
-        this.url = "https://www.etoro.com/";
-    }
+    @Autowired
+    private TradeUnitService tradeUnitService;
+
+    @Autowired
+    private HistoryService historyService;
+
+    @Autowired
+    private EtoroService etoroService;
+
+    @Autowired
+    private EtoroInstrumenIdConverter converter;
 
     private String url;
+
+    public EtoroPortfolioMonitor() {
+        this.url = "https://www.etoro.com/";
+    }
 
     @PostConstruct
     public void init() {
         driver.get(url);
-        if(portfolioRepository.findAll().size() == 0) {
+        if (portfolioRepository.findAll().size() == 0) {
             portfolioRepository.save(new EtoroPortfolio("6106336"));
 
         }
@@ -52,57 +63,64 @@ public class EtoroPortfolioMonitor implements Monitor {
     //@Scheduled(fixedRate = 60000, initialDelay = 5000)
     public void scan() throws InterruptedException {
         log.info("scaning etoro");
+        List<EtoroPortfolio> portfolios = portfolioRepository.findAll();
 
-    }
+        for (int i = 0; i < portfolios.size(); i++) {
+            List<EtoroPosition> idsToAdd = new ArrayList<>();
+            List<EtoroPosition> idsToRemove = new ArrayList<>();
+            EtoroPortfolio p = portfolios.get(i);
+            List<EtoroPosition> newPos = new ArrayList<>();
 
-    public EtoroPortfolio getPortfolio(String traderId) throws InterruptedException {
-        driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/portfolios?cid=%s&format=json", traderId));
+            try {
+                newPos.addAll(etoroService.scanPositions(p.getId()));
+            } catch (Exception e) {
+                log.warn("Could not connect to etoro!!!");
+                return;
+            }
 
-        String pageSrc = driver.getPageSource();
-        log.info("Portfolio: " + pageSrc);
-        JSONObject res = new JSONObject( Jsoup.parse(pageSrc).body().text());
-        EtoroPortfolio portfolio = new EtoroPortfolio();
-        portfolio.setId(traderId);
-        JSONArray groups = res.getJSONArray("AggregatedPositions");
-        List<EtoroPosition> newPositions = new ArrayList<>();
-        groups.forEach(g -> {
-            JSONObject groupObj = (JSONObject)g;
-            String instId = "" + groupObj.get("InstrumentID");
-            driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/positions?InstrumentID=%s&cid=%s&format=json", instId, traderId));
-            JSONObject posJson = new JSONObject( Jsoup.parse( driver.getPageSource()).body().text());
-            JSONArray posArray = posJson.getJSONArray("PublicPositions");
-            posArray.forEach(pos -> {
-                EtoroPosition posObj = new EtoroPosition();
-
-                posObj.setPosId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
-                posObj.setInstrumentId("" + ((JSONObject)pos).get("InstrumentID"));
-                posObj.setAmmount(new BigDecimal(String.valueOf(((JSONObject)pos).get("Amount"))));
-                String type = ("" +((JSONObject)pos).get("IsBuy")).equals("true") ? "buy" : "sell";
-                posObj.setType(type);
-                posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
-
-                String s=String.valueOf(((JSONObject)pos).get("OpenDateTime"));
-
-                TimeZone tz = TimeZone.getDefault();
-                Calendar cal = Calendar.getInstance(tz);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                sdf.setCalendar(cal);
-                try {
-                    cal.setTime(sdf.parse(s));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            p.getPositionsMap().forEach((k, v) -> {
+                if (!newPos.contains(v)) {
+                    idsToRemove.add(v);
                 }
-                Date date = cal.getTime();
-                posObj.setOpenTime(date);
-                newPositions.add(posObj);
-                // posObj.setAmmount(((JSONObject)pos).getString("id"));
             });
 
-        });
-        portfolio.setPositionGroups(newPositions);
-        portfolioRepository.save(portfolio);
-        return portfolio;
+            newPos.forEach(pos -> {
+
+                if (!p.getPositionsMap().containsKey(pos.getPosId()) && tradeUnitService.canAddPosition() &&
+                        pos.getEtoroRef() == null) {
+                    log.info("adding to list " + pos);
+                    idsToAdd.add(pos);
+                }
+            });
+
+            idsToRemove.forEach(pos -> {
+                try {
+                    onClosePosition(pos, pos.getPosId());
+                    p.getPositionsMap().remove(pos.getPosId());
+                    tradeUnitService.removePositionFromCounter();
+                    historyService.addEtoroPosition(pos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            idsToAdd.forEach(pos -> {
+                p.getPositionsMap().put(pos.getPosId(), pos);
+                try {
+                    //todo transaction
+                    onOpenNewPosition(pos, pos.getPosId());
+                    p.positionsMap.put(pos.getPosId(), pos);
+                    portfolioRepository.save(p);
+                    tradeUnitService.addPositionToCounter();
+                } catch (Exception e) {
+                    log.info(e.getMessage());
+                }
+            });
+            portfolioRepository.save(p);
+        }
+
     }
+
 
     @Override
     public void onClosePosition(Position p, String trader) {
@@ -110,8 +128,27 @@ public class EtoroPortfolioMonitor implements Monitor {
     }
 
     @Override
-    public void onOpenNewPosition(Position p, String trader) {
+    public void onOpenNewPosition(Position pos, String trader) throws InterruptedException {
+        EtoroPosition p = (EtoroPosition) pos;
+        log.info("Opening new position: tr{} {} {} {} {}", trader, p.getPosId(), p.getInstrumentId(), p.getOpenTime(), p.getAmmount());
+        //if(true) {
+        if ((new Date().getTime() - p.getOpenTime().getTime()) < 3 * 20 * 600000 && p.getEtoroRef() == null) {
+            EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
+            p.setEtoroRef(etoroP.getPosId());
+            log.info("Opened " + p.getPosId());
+        } else {
+            log.info("Position: tr{} {} {} {} {} is too old to be open", trader, p.getPosId(), p.getInstrumentId(), p.getOpenTime(), p.getAmmount());
+        }
+    }
 
+    private Order transformToOrder(EtoroPosition p) {
+        Order o = new Order();
+        //o.setOpen(new BigDecimal(p.get()));
+        o.setValue(new BigDecimal(140));
+        o.setName(converter.getNameByInstrumentId(p.getInstrumentId()));
+        o.setLeverage(Integer.parseInt(p.getLeverage()));
+        o.setType(p.getType());
+        return o;
     }
 
 
