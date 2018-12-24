@@ -45,13 +45,13 @@ public class ZuluController {
     }
 
     @RequestMapping(value = "/zulu/portfolio", method = RequestMethod.PUT)
-    public ResponseEntity setFactorToPortfolio(ZuluPortfolio p) {
+    public ResponseEntity setFactorToPortfolio(@RequestBody ZuluPortfolio p) {
         zuluService.setFactor(p.getId(), p.getFactor());
         return ResponseEntity.ok(true);
     }
 
     @RequestMapping(value = "/zulu/portfolios", method = RequestMethod.GET)
-    public List<ZuluPortfolio> getPortfolios(ZuluPortfolio p) {
+    public List<ZuluPortfolio> getPortfolios() {
        return zuluService.getPortfolios();
     }
 }
