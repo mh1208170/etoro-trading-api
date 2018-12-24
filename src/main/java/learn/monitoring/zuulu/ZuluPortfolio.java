@@ -17,11 +17,10 @@ public class ZuluPortfolio implements Portfolio {
 
     Map<String, ZuluPosition> positionsMap = new ConcurrentHashMap<>();
 
+    private double factor = 1d;
+
     public ZuluPortfolio(String id) {
         this.id = id;
     }
 
-    public void addToPosMap(ZuluPosition pos) {
-        positionsMap.put(pos.getId(), pos);
-    }
 }

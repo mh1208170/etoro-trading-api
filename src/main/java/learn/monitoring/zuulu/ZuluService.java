@@ -35,4 +35,10 @@ public class ZuluService {
     public List<ZuluPortfolio> getPortfolios() {
         return portfolioRepository.findAll();
     }
+
+    public void setFactor(String id, Double factor) {
+        ZuluPortfolio zp = portfolioRepository.findOne(id);
+        zp.setFactor(factor);
+        portfolioRepository.save(zp);
+    }
 }

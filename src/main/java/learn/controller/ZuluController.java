@@ -43,4 +43,10 @@ public class ZuluController {
         portfolios.forEach(p -> p.getPositionsMap().entrySet().forEach(e -> positions.add(e.getValue())));
         return positions.stream().filter(p -> p.getEtoroRef() != null).collect(Collectors.toList());
     }
+
+    @RequestMapping(value = "/zulu/portfolio", method = RequestMethod.PUT)
+    public ResponseEntity setFactorToPortfolio(ZuluPortfolio p) {
+        zuluService.setFactor(p.getId(), p.getFactor());
+        return ResponseEntity.ok(true);
+    }
 }

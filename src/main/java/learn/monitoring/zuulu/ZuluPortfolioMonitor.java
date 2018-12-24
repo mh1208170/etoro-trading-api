@@ -126,7 +126,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         log.info("Opening new position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         //if(true) {
         if((new Date().getTime() - p.getDateTime().getTime()) < 1 * 20 * 600000 && p.getEtoroRef() == null) {
-            EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
+            EtoroPosition etoroP = executer.doOrder(transformToOrder(p, portfolioRepository.findOne(trader).getFactor()));
             p.setEtoroRef(etoroP.getPosId());
             tradeUnitService.addPositionToCounter();
             log.info("Opened " + p.getId());
@@ -155,10 +155,10 @@ public class ZuluPortfolioMonitor implements Monitor {
     }
 
     //TODO remove mocked position name
-    public  Order transformToOrder(ZuluPosition zp) {
+    public  Order transformToOrder(ZuluPosition zp, double factor) {
         Order o = new Order();
         o.setOpen(new BigDecimal(zp.getEntryRate()));
-        o.setValue(new BigDecimal(140));
+        o.setValue(new BigDecimal(140).multiply(new BigDecimal(factor)));
         o.setName(zp.getCurrencyName().replace("/",""));
         o.setLeverage(30);
         o.setType(zp.getTradeType());
