@@ -90,7 +90,7 @@ public class EtoroOrderExecuter {
             throw new RuntimeException("Was unable scaning positions ID, ending application to prevent duplications!");
         } else {
             log.info("Was unable open order {}", o);
-            throw new RuntimeException("Curs is to high/low");
+            throw new RuntimeException("Curs is to high/low " + curs + " / " + o.getOpen());
         }
 
     }

@@ -19,4 +19,8 @@ public class Order {
     private BigDecimal open;
     private Integer leverage;
 
+    @Override
+    public String toString() {
+        return String.format("Order: %s %s %s %s", name, type, value, leverage);
+    }
 }
