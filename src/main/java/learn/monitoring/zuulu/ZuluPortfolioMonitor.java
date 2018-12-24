@@ -82,7 +82,7 @@ public class ZuluPortfolioMonitor implements Monitor {
 
                 if(!p.getPositionsMap().containsKey(pos.getId()) && tradeUnitService.canAddPosition() &&
                         pos.getEtoroRef() == null && !ignoreList.contains(pos.getCurrencyName()) ) {
-                    log.info("adding to list " + pos);
+                    log.debug("adding to list " + pos);
                     idsToAdd.add(pos);
                 }
             });
@@ -125,7 +125,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         ZuluPosition p = (ZuluPosition) pos;
         log.info("Opening new position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         //if(true) {
-        if((new Date().getTime() - p.getDateTime().getTime()) < 3 * 20 * 600000 && p.getEtoroRef() == null) {
+        if((new Date().getTime() - p.getDateTime().getTime()) < 1 * 20 * 600000 && p.getEtoroRef() == null) {
             EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
             p.setEtoroRef(etoroP.getPosId());
             tradeUnitService.addPositionToCounter();
