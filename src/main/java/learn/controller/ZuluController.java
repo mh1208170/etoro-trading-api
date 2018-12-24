@@ -37,7 +37,7 @@ public class ZuluController {
     }
 
     @RequestMapping(value = "/zulu/open/positions", method = RequestMethod.GET)
-    public List<ZuluPosition> getPortfoliosInfo() {
+    public List<ZuluPosition> getOpenPositions() {
         List<ZuluPortfolio> portfolios = zuluService.getPortfolios();
         List<ZuluPosition> positions = new ArrayList<>();
         portfolios.forEach(p -> p.getPositionsMap().entrySet().forEach(e -> positions.add(e.getValue())));
@@ -48,5 +48,10 @@ public class ZuluController {
     public ResponseEntity setFactorToPortfolio(ZuluPortfolio p) {
         zuluService.setFactor(p.getId(), p.getFactor());
         return ResponseEntity.ok(true);
+    }
+
+    @RequestMapping(value = "/zulu/portfolios", method = RequestMethod.GET)
+    public List<ZuluPortfolio> getPortfolios(ZuluPortfolio p) {
+       return zuluService.getPortfolios();
     }
 }
