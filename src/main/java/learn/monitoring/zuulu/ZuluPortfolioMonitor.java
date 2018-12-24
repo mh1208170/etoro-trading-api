@@ -93,7 +93,7 @@ public class ZuluPortfolioMonitor implements Monitor {
                     p.getPositionsMap().remove(pos.getId());
                     tradeUnitService.removePositionFromCounter();
                     historyService.addZuluPosition(pos);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
@@ -104,7 +104,7 @@ public class ZuluPortfolioMonitor implements Monitor {
                     onOpenNewPosition(pos, pos.getId());
                     p.positionsMap.put(pos.getId(), pos);
                     portfolioRepository.save(p);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     log.info(e.getMessage());
                 }
             });
