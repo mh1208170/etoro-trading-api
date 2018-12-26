@@ -40,7 +40,7 @@ public class ZuluController {
     public List<ZuluPosition> getOpenPositions() {
         List<ZuluPortfolio> portfolios = zuluService.getPortfolios();
         List<ZuluPosition> positions = new ArrayList<>();
-        portfolios.forEach(p -> p.getPositionsMap().entrySet().forEach(e -> positions.add(e.getValue())));
+        portfolios.forEach(p -> p.getPositionsMap().forEach((key, value) -> positions.add(value)));
         return positions.stream().filter(p -> p.getEtoroRef() != null).collect(Collectors.toList());
     }
 

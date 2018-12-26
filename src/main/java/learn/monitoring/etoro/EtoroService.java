@@ -1,6 +1,6 @@
 package learn.monitoring.etoro;
 
-import learn.user.history.HistoryService;
+import learn.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package learn.units;
+package learn.user.units;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

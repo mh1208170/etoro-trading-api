@@ -1,4 +1,4 @@
-package learn.units;
+package learn.user.units;
 
 import lombok.Getter;
 import lombok.Setter;

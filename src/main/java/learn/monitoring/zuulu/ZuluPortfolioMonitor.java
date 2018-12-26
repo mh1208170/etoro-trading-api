@@ -6,8 +6,8 @@ import learn.monitoring.Position;
 import learn.monitoring.etoro.EtoroPosition;
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
-import learn.units.TradeUnitService;
-import learn.user.history.HistoryService;
+import learn.user.units.TradeUnitService;
+import learn.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -126,7 +126,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         log.info("Opening new position: tr{} {} {} {} {}", trader, p.getId(), p.getCurrencyName(), p.getDateTime(), p.getStdLotds());
         //if(true) {
         if((new Date().getTime() - p.getDateTime().getTime()) < 1 * 20 * 600000 && p.getEtoroRef() == null) {
-            EtoroPosition etoroP = executer.doOrder(transformToOrder(p, portfolioRepository.findOne(trader).getFactor()));
+            EtoroPosition etoroP = executer.doOrder(transformToOrder(p, portfolioRepository.findOne(trader.split(":")[0]).getFactor()));
             p.setEtoroRef(etoroP.getPosId());
             tradeUnitService.addPositionToCounter();
             log.info("Opened " + p.getId());

@@ -2,8 +2,8 @@ package learn.controller;
 
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
-import learn.user.OrderHistory;
-import learn.user.history.HistoryService;
+import learn.history.OrderHistory;
+import learn.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

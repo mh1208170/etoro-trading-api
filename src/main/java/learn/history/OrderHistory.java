@@ -1,4 +1,4 @@
-package learn.user;
+package learn.history;
 
 import lombok.Getter;
 import lombok.Setter;

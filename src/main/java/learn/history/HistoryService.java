@@ -1,8 +1,7 @@
-package learn.user.history;
+package learn.history;
 
 import learn.monitoring.etoro.EtoroPosition;
 import learn.monitoring.zuulu.ZuluPosition;
-import learn.user.OrderHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
