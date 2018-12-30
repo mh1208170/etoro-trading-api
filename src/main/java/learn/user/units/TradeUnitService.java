@@ -1,18 +1,20 @@
 package learn.user.units;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
 @Service
+@Getter
+@Setter
 public class TradeUnitService {
 
     public static final Double PORTFOLIO_FUNDS = 10000d;
 
-    public static final Double UNIT_VALUE = 140d;
-
-    public static final Integer MAX_UNITS_COUNT = (int)((PORTFOLIO_FUNDS * 0.4) / UNIT_VALUE);
+    public static final Integer MAX_UNITS_COUNT = 20;
 
     @Autowired
     private TradeUnitRepository repository;
@@ -43,6 +45,22 @@ public class TradeUnitService {
             return true;
         }
         return false;
+    }
+
+    public void setStdLotSize(Double stdLotSize) {
+        TradeUnitsCounter counter = repository.findAll().get(0);
+        counter.setStdLotSize(stdLotSize);
+        repository.save(counter);
+    }
+
+    public void setStdLeverage(String leverage) {
+        TradeUnitsCounter counter = repository.findAll().get(0);
+        counter.setStdLeverage(leverage);
+        repository.save(counter);
+    }
+
+    public TradeUnitsCounter getTradeUnitsCounter() {
+        return repository.findAll().get(0);
     }
 
     public boolean canAddPosition() {

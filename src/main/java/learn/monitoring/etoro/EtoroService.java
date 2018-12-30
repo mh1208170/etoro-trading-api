@@ -27,11 +27,14 @@ public class EtoroService {
     @Autowired
     HistoryService historyService;
 
+    public List<EtoroPortfolio> getPortfolios() {
+        return portfolioRepository.findAll();
+    }
+
     public List<EtoroPosition> scanPositions(String traderId) {
         driver.navigate().to(String.format("https://www.etoro.com/sapi/trade-data-real/live/public/portfolios?cid=%s&format=json", traderId));
 
         String pageSrc = driver.getPageSource();
-        log.info("Portfolio: " + pageSrc);
         JSONObject res = new JSONObject( Jsoup.parse(pageSrc).body().text());
         JSONArray groups = res.getJSONArray("AggregatedPositions");
         List<EtoroPosition> newPositions = new ArrayList<>();
@@ -44,11 +47,11 @@ public class EtoroService {
             posArray.forEach(pos -> {
                 EtoroPosition posObj = new EtoroPosition();
 
-                posObj.setPosId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
+                posObj.setId(((JSONObject)pos).get("CID") + ":" + ((JSONObject)pos).get("PositionID"));
                 posObj.setInstrumentId("" + ((JSONObject)pos).get("InstrumentID"));
                 posObj.setAmmount(new BigDecimal(String.valueOf(((JSONObject)pos).get("Amount"))));
                 String type = ("" +((JSONObject)pos).get("IsBuy")).equals("true") ? "buy" : "sell";
-                posObj.setType(type);
+                posObj.setTradeType(type);
                 posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
 
                 String s=String.valueOf(((JSONObject)pos).get("OpenDateTime"));
@@ -70,5 +73,9 @@ public class EtoroService {
 
         });
         return newPositions;
+    }
+
+    public EtoroPortfolio addPortfolio(String id) {
+        return portfolioRepository.save(new EtoroPortfolio(id));
     }
 }

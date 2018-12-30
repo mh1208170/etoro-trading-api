@@ -29,7 +29,7 @@ public class OrderController {
 
     @RequestMapping(value = "/position/{id}/{name}", method = RequestMethod.DELETE)
     public ResponseEntity deletePositionById(@PathVariable("id") String id, @PathVariable("name") String name) throws InterruptedException {
-        boolean res = executer.closePositionById(id, name);
+        boolean res = executer.closePositionById("#" + id, name);
         Thread.sleep(1000);
         return ResponseEntity.ok().body(res);
     }

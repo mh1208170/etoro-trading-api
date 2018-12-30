@@ -13,8 +13,19 @@ public class EtoroInstrumenIdConverter {
 
     @PostConstruct
     public void init() {
-        idMapping.put("","");
-
+        // TODO add new InstrumentIDs
+        idMapping.put("32","ger30");
+        idMapping.put("28","nsdq100");
+        idMapping.put("30","uk100");
+        idMapping.put("36","jpn225");
+        idMapping.put("27","spx500");
+        idMapping.put("38","hkg50");
+        idMapping.put("31","fra40");
+        idMapping.put("43","eustx50");
+        idMapping.put("34","esp35");
+        idMapping.put("29","dj30");
+        idMapping.put("26","china50");
+        idMapping.put("33","aus200");
     }
 
 

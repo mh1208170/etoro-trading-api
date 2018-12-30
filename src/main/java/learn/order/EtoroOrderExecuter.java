@@ -59,7 +59,9 @@ public class EtoroOrderExecuter {
         inValue.sendKeys("$" + o.getValue());
         inValue.sendKeys(Keys.ENTER);
         Thread.sleep(50);
-        List<WebElement> leverages = authorizedDriver.findElements(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[3]/tabs/div[3]/tabscontent/tab[2]/div/div[1]/a"));
+        authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[3]/tabs/div[1]/div[2]/tabstitles/tabtitle[2]/a/span")).click();
+        Thread.sleep(50);
+        List<WebElement> leverages = authorizedDriver.findElements(By.className("risk-itemlevel"));
         if (!leverages.isEmpty()) {
             leverages.forEach(l -> {
                 if (l.getText().replaceAll("X", "").equalsIgnoreCase(o.getLeverage() + "")) {
@@ -107,7 +109,7 @@ public class EtoroOrderExecuter {
         String id = authorizedDriver.findElement(By.cssSelector("div.w-execution-main-head > div.w-sm-position-info-trade > div.w-sm-position-info-trade-value.ng-binding"))
                 .getText();
         log.info("Order id ist: " + id);
-        p.setPosId(id);
+        p.setId(id);
         return p;
 
     }

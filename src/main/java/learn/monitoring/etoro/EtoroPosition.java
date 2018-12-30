@@ -1,6 +1,6 @@
 package learn.monitoring.etoro;
 
-import learn.monitoring.Position;
+import learn.monitoring.AbstractPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,23 +13,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class EtoroPosition implements Position {
+public class EtoroPosition extends AbstractPosition {
 
-    String posId;
-    String type;
-    String name;
-    String instrumentId;
-    BigDecimal ammount;
-    String leverage;
-    Date openTime;
-    BigDecimal sl;
-    BigDecimal tp;
-    String etoroRef;
-
+    private String name;
+    private String instrumentId;
+    private BigDecimal ammount;
+    private String leverage;
+    private Date openTime;
 
     @Override
     public String toString() {
-        return String.format("------- %s %s %s ------\n", name, type, ammount);
+        return String.format("Etoro Position: %s %s %s %s", id, instrumentId, tradeType, leverage);
     }
 }
 
