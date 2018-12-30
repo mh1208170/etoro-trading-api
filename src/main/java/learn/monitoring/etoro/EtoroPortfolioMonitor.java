@@ -108,7 +108,6 @@ public class EtoroPortfolioMonitor implements Monitor {
                     //todo transaction
                     onOpenNewPosition(pos, pos.getId());
                     p.positionsMap.put(pos.getId(), pos);
-                    portfolioRepository.save(p);
                     tradeUnitService.addPositionToCounter();
                     portfolioRepository.save(p);
                 } catch (Exception e) {

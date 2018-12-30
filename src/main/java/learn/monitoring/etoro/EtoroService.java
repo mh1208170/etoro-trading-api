@@ -78,4 +78,8 @@ public class EtoroService {
     public EtoroPortfolio addPortfolio(String id) {
         return portfolioRepository.save(new EtoroPortfolio(id));
     }
+
+    public void removePortfolio(String id) {
+        portfolioRepository.delete(id);
+    }
 }

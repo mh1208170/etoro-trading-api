@@ -21,7 +21,7 @@ public class MonitorScheduler {
     public void executeMonitors() {
 
         zuluPortfolioMonitor.scan();
-//        etoroPortfolioMonitor.scan();
+        etoroPortfolioMonitor.scan();
         log.info("----");
     }
 }

@@ -1,5 +1,6 @@
 package learn.monitoring;
 
+import learn.monitoring.etoro.EtoroPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,16 @@ public abstract class AbstractPosition {
     protected String tradeType;
     protected Date dateTime;
     protected String etoroRef;
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    //TODO
+    public boolean equals(Object obj) {
+        AbstractPosition ep = (AbstractPosition) obj;
+        return id.equals(ep.getId());
+    }
 }

@@ -18,18 +18,6 @@ public class ZuluPosition extends AbstractPosition {
     private Double entryRate;
 
     @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    @Override
-    //TODO
-    public boolean equals(Object obj) {
-        ZuluPosition zp = (ZuluPosition) obj;
-        return id.equals(zp.getId());
-    }
-
-    @Override
     public String toString() {
         return String.format("ZuluPosition: %s %s %s %f",id, currencyName, tradeType, entryRate);
     }

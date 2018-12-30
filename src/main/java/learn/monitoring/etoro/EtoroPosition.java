@@ -1,6 +1,7 @@
 package learn.monitoring.etoro;
 
 import learn.monitoring.AbstractPosition;
+import learn.monitoring.zuulu.ZuluPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
