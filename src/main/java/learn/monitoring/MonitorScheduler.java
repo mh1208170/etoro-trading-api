@@ -20,6 +20,6 @@ public class MonitorScheduler {
     @Scheduled(fixedRate = 15000, initialDelay = 5000)
     public void executeMonitors() {
         zuluPortfolioMonitor.scan();
-        etoroPortfolioMonitor.scan();
+        //etoroPortfolioMonitor.scan();
     }
 }

@@ -1,6 +1,5 @@
 package learn.monitoring;
 
-import learn.monitoring.etoro.EtoroPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
