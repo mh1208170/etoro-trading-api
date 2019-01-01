@@ -1,7 +1,6 @@
 package learn.monitoring.etoro;
 
 import learn.monitoring.AbstractPosition;
-import learn.monitoring.zuulu.ZuluPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,7 @@ public class EtoroPosition extends AbstractPosition {
     private String name;
     private String instrumentId;
     private BigDecimal ammount;
+    private BigDecimal openRate;
     private String leverage;
     private Date openTime;
 

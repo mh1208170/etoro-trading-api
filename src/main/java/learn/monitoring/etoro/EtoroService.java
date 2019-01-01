@@ -53,6 +53,7 @@ public class EtoroService {
                 String type = ("" +((JSONObject)pos).get("IsBuy")).equals("true") ? "buy" : "sell";
                 posObj.setTradeType(type);
                 posObj.setLeverage(String.valueOf(((JSONObject)pos).get("Leverage")));
+                posObj.setOpenRate(new BigDecimal(String.valueOf(((JSONObject)pos).get("OpenRate"))));
 
                 String s=String.valueOf(((JSONObject)pos).get("OpenDateTime"));
 

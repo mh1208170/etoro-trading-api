@@ -158,6 +158,7 @@ public class EtoroPortfolioMonitor implements Monitor {
     private Order transformToOrder(EtoroPosition p) {
         Order o = new Order();
         //o.setOpen(new BigDecimal(p.get()));
+        o.setOpen(p.getOpenRate());
         o.setValue(new BigDecimal(100));
         o.setName(converter.getNameByInstrumentId(p.getInstrumentId()));
         o.setLeverage(Integer.parseInt(p.getLeverage()));

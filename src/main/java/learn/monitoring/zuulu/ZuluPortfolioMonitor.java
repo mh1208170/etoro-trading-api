@@ -138,7 +138,6 @@ public class ZuluPortfolioMonitor implements Monitor {
 
     }
 
-    //TODO remove mocked position name
     @Override
     public boolean onClosePosition(AbstractPosition pos, String trader) throws InterruptedException {
         ZuluPosition p = (ZuluPosition) pos;
@@ -158,7 +157,6 @@ public class ZuluPortfolioMonitor implements Monitor {
         }
     }
 
-    //TODO remove mocked position name
     public  Order transformToOrder(ZuluPosition zp, double factor) {
         Order o = new Order();
         o.setOpen(new BigDecimal(zp.getEntryRate()));
