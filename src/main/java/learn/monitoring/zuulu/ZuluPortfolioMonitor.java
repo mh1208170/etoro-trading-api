@@ -164,6 +164,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         o.setName(zp.getCurrencyName().replace("/",""));
         o.setLeverage(20);
         o.setType(zp.getTradeType());
+        o.setPlatform("zulu");
         return o;
 
     }

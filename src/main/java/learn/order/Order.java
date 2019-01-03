@@ -18,6 +18,7 @@ public class Order {
     private BigDecimal value;
     private BigDecimal open;
     private Integer leverage;
+    private String platform;
 
     @Override
     public String toString() {

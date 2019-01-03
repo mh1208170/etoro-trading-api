@@ -163,6 +163,7 @@ public class EtoroPortfolioMonitor implements Monitor {
         o.setName(converter.getNameByInstrumentId(p.getInstrumentId()));
         o.setLeverage(Integer.parseInt(p.getLeverage()));
         o.setType(p.getTradeType());
+        o.setPlatform("etoro");
         return o;
     }
 

@@ -71,8 +71,9 @@ public class EtoroOrderExecuter {
         }
         Thread.sleep(2000);
         Double curs = Double.parseDouble(authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[1]/div[2]/div[1]/span[1]")).getText());
-        if ((o.getType().equalsIgnoreCase("buy") && curs <= o.getOpen().doubleValue()) ||
-                (o.getType().equalsIgnoreCase("sell") && curs >= o.getOpen().doubleValue())) {
+        if (((o.getType().equalsIgnoreCase("buy") && curs <= o.getOpen().doubleValue()) ||
+                (o.getType().equalsIgnoreCase("sell") && curs >= o.getOpen().doubleValue()))
+                || "etoro".equalsIgnoreCase(o.getPlatform())) {
             authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[4]/div/button")).click();
 
             for (int i = 0; i < 5; i++) {
