@@ -1,5 +1,6 @@
 package learn.monitoring.etoro;
 
+import learn.monitoring.AbstractPortfolio;
 import learn.monitoring.Monitor;
 import learn.monitoring.AbstractPosition;
 import learn.order.EtoroOrderExecuter;
@@ -92,7 +93,7 @@ public class EtoroPortfolioMonitor implements Monitor {
 
             idsToRemove.forEach(pos -> {
                 try {
-                    onClosePosition(pos, pos.getId());
+                    onClosePosition(pos, p);
                     p.getPositionsMap().remove(pos.getId());
                     tradeUnitService.removePositionFromCounter();
                     historyService.addEtoroPosition(pos);
@@ -106,8 +107,8 @@ public class EtoroPortfolioMonitor implements Monitor {
                 p.getPositionsMap().put(pos.getId(), pos);
                 try {
                     //todo transaction
-                    onOpenNewPosition(pos, pos.getId());
-                    p.positionsMap.put(pos.getId(), pos);
+                    onOpenNewPosition(pos, p);
+                    p.getPositionsMap().put(pos.getId(), pos);
                     tradeUnitService.addPositionToCounter();
                     portfolioRepository.save(p);
                 } catch (Exception e) {
@@ -121,10 +122,10 @@ public class EtoroPortfolioMonitor implements Monitor {
 
 
     @Override
-    public boolean onClosePosition(AbstractPosition pos, String trader) throws InterruptedException {
+    public boolean onClosePosition(AbstractPosition pos, AbstractPortfolio trader) throws InterruptedException {
         EtoroPosition p = (EtoroPosition) pos;
         log.info("Closing position: tr{} {} {} {} {}", trader, p.getId(), converter.getNameByInstrumentId(p.getInstrumentId()), p.getOpenTime(), p.getAmmount());
-        if (p.getEtoroRef() != null) {
+        if (p.getEtoroRef() != null && !pos.isIgnored()) {
             if(executer.closePositionById(p.getEtoroRef(), converter.getNameByInstrumentId(p.getInstrumentId()))) {
                 log.info("Closed position: tr{} {} {} {} {}",trader, p.getId(),converter.getNameByInstrumentId(p.getInstrumentId()), p.getOpenTime(), p.getAmmount());
                 return true;
@@ -140,10 +141,20 @@ public class EtoroPortfolioMonitor implements Monitor {
     }
 
     @Override
-    public boolean onOpenNewPosition(AbstractPosition pos, String trader) throws InterruptedException {
+    public boolean onOpenNewPosition(AbstractPosition pos, AbstractPortfolio trader) throws InterruptedException {
         EtoroPosition p = (EtoroPosition) pos;
-        log.info("Opening new position: tr{} {} {} {} {}", trader, p.getId(), p.getInstrumentId(), p.getOpenTime(), p.getAmmount());
-        //if(true) {
+        log.info("Opening new position: tr{} {} {} {} {}", trader.getId(), p.getId(), p.getInstrumentId(), p.getOpenTime(), p.getAmmount());
+
+        if(trader.getSkipFactor() != 0) {
+            if(trader.getSkipFactor() == trader.getSkipCounter()) {
+                pos.setIgnored(true);
+                trader.setSkipCounter(0);
+            } else if(trader.getSkipCounter() < trader.getSkipFactor()) {
+                pos.setIgnored(true);
+                trader.setSkipCounter(trader.getSkipCounter() + 1);
+            }
+            return true;
+        }
         if ((new Date().getTime() - p.getOpenTime().getTime()) < 1 * 20 * 600000 && p.getEtoroRef() == null) {
             EtoroPosition etoroP = executer.doOrder(transformToOrder(p));
             p.setEtoroRef(etoroP.getId());

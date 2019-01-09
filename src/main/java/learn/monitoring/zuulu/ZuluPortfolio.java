@@ -1,6 +1,6 @@
 package learn.monitoring.zuulu;
 
-import learn.monitoring.Portfolio;
+import learn.monitoring.AbstractPortfolio;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,13 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ZuluPortfolio implements Portfolio {
+public class ZuluPortfolio extends AbstractPortfolio {
 
-    private String id;
-
-    Map<String, ZuluPosition> positionsMap = new ConcurrentHashMap<>();
-
-    private double factor = 1d;
+    protected Map<String, ZuluPosition> positionsMap = new ConcurrentHashMap<>();
 
     public ZuluPortfolio(String id) {
         this.id = id;

@@ -1,6 +1,6 @@
 package learn.monitoring.etoro;
 
-import learn.monitoring.Portfolio;
+import learn.monitoring.AbstractPortfolio;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,21 +8,17 @@ import lombok.Setter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class EtoroPortfolio implements Portfolio {
+public class EtoroPortfolio extends AbstractPortfolio {
 
-    String id;
-    Map<String, EtoroPosition> positionsMap = new ConcurrentHashMap<>();
-    private String type = "real";
+    protected Map<String, EtoroPosition> positionsMap = new ConcurrentHashMap<>();
 
     public EtoroPortfolio(String id) {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return id;
-    }
+
 }

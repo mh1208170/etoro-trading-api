@@ -16,6 +16,7 @@ public abstract class AbstractPosition {
     protected String tradeType;
     protected Date dateTime;
     protected String etoroRef;
+    protected boolean isIgnored;
 
     @Override
     public int hashCode() {
