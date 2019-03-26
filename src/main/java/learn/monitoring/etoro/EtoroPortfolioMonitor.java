@@ -54,7 +54,7 @@ public class EtoroPortfolioMonitor implements Monitor {
     public void init() {
         driver.get(url);
         if (portfolioRepository.findAll().size() == 0) {
-            portfolioRepository.save(new EtoroPortfolio("9122416"));
+          //  portfolioRepository.save(new EtoroPortfolio("9122416"));
         }
         log.info("started etoro positions monitoring");
     }
@@ -73,6 +73,7 @@ public class EtoroPortfolioMonitor implements Monitor {
                 newPos.addAll(etoroService.scanPositions(p.getId()));
             } catch (Exception e) {
                 log.warn("Could not connect to etoro!!!");
+                driver.navigate().refresh();
                 return;
             }
 

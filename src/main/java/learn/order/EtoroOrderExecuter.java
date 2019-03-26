@@ -63,11 +63,22 @@ public class EtoroOrderExecuter {
         Thread.sleep(50);
         List<WebElement> leverages = authorizedDriver.findElements(By.className("risk-itemlevel"));
         if (!leverages.isEmpty()) {
-            leverages.forEach(l -> {
-                if (l.getText().replaceAll("X", "").equalsIgnoreCase(o.getLeverage() + "")) {
-                    l.click();
+            try {
+                WebElement matchLeverage = leverages.get(0);
+                for (WebElement l: leverages) {
+                    int current = Integer.parseInt(l.getText().replaceAll("X", ""));
+                    if (l.getText().replaceAll("X", "").equalsIgnoreCase(o.getLeverage() + "")) {
+                        matchLeverage = l;
+                        break;
+                    }
+                    if (current > Integer.parseInt(matchLeverage.getText().replaceAll("X", ""))) {
+                        matchLeverage = l;
+                    }
                 }
-            });
+                matchLeverage.click();
+            } catch (Exception e) {
+                log.error("Failed to find leverage!");
+            }
         }
         Thread.sleep(2000);
         Double curs = Double.parseDouble(authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[1]/div[2]/div[1]/span[1]")).getText());
