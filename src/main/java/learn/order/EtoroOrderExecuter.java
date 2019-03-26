@@ -54,11 +54,7 @@ public class EtoroOrderExecuter {
             sellBuyBtns.get(1).click();
         }
         Thread.sleep(200);
-        WebElement inValue = authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[2]/div[2]/div[1]/div[2]/input"));
-        inValue.clear();
-        inValue.sendKeys("$" + o.getValue());
-        inValue.sendKeys(Keys.ENTER);
-        Thread.sleep(50);
+
         authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[3]/tabs/div[1]/div[2]/tabstitles/tabtitle[2]/a/span")).click();
         Thread.sleep(50);
         List<WebElement> leverages = authorizedDriver.findElements(By.className("risk-itemlevel"));
@@ -80,6 +76,10 @@ public class EtoroOrderExecuter {
                 log.error("Failed to find leverage!");
             }
         }
+        WebElement inValue = authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[2]/div[2]/div[1]/div[2]/input"));
+        inValue.clear();
+        inValue.sendKeys("$" + o.getValue());
+        inValue.sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         Double curs = Double.parseDouble(authorizedDriver.findElement(By.xpath("//*[@id=\"open-position-view\"]/div[2]/div/div[1]/div[2]/div[1]/span[1]")).getText());
         if (((o.getType().equalsIgnoreCase("buy") && curs <= o.getOpen().doubleValue()) ||
