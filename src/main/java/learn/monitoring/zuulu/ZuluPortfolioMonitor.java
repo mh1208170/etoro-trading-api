@@ -56,7 +56,7 @@ public class ZuluPortfolioMonitor implements Monitor {
         log.info("started zulu position monitoring");
     }
 
-    public void getTraderPositions() {
+    public void scanAndCopyPortfolios() {
         List<ZuluPortfolio> portfolios = portfolioRepository.findAll();
 
         for(int i = 0; i < portfolios.size(); i++) {
@@ -118,10 +118,9 @@ public class ZuluPortfolioMonitor implements Monitor {
 
 
     public void scan() {
-        getTraderPositions();
+        scanAndCopyPortfolios();
     }
 
-    //TODO remove mocked position name
     @Override
     public boolean onOpenNewPosition(AbstractPosition pos, AbstractPortfolio trader) throws InterruptedException {
         ZuluPosition p = (ZuluPosition) pos;
@@ -161,13 +160,14 @@ public class ZuluPortfolioMonitor implements Monitor {
         }
     }
 
-    public  Order transformToOrder(ZuluPosition zp, double factor) {
+    public Order transformToOrder(ZuluPosition zp, double factor) {
         Order o = new Order();
         o.setOpen(new BigDecimal(zp.getEntryRate()));
         o.setValue(new BigDecimal(200).multiply(new BigDecimal(factor)));
         o.setName(zp.getCurrencyName().replace("/",""));
         o.setLeverage(20);
         o.setType(zp.getTradeType());
+        o.setRealTime(false);
         o.setPlatform("zulu");
         return o;
 

@@ -19,6 +19,7 @@ public class Order {
     private BigDecimal open;
     private Integer leverage;
     private String platform;
+    private boolean isRealTime;
 
     @Override
     public String toString() {

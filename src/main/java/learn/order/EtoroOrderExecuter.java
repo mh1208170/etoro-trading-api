@@ -106,7 +106,6 @@ public class EtoroOrderExecuter {
             log.info("Was unable open order {}", o);
             throw new RuntimeException("Curs is to high/low " + curs + " / " + o.getOpen());
         }
-
     }
 
     private EtoroPosition scanId(EtoroPosition p) throws InterruptedException {
@@ -123,7 +122,6 @@ public class EtoroOrderExecuter {
         log.info("Order id ist: " + id);
         p.setId(id);
         return p;
-
     }
 
     public boolean closePositionById(String id, String name) throws InterruptedException {
@@ -157,6 +155,4 @@ public class EtoroOrderExecuter {
         }
         return false;
     }
-
-
 }

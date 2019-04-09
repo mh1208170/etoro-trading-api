@@ -34,7 +34,7 @@ public class HistoryService {
             history.setType(p.getTradeType());
 
             authorizedDriver.navigate().to("https://www.etoro.com/portfolio/history");
-            Thread.sleep(700);
+            Thread.sleep(1500);
             Elements parsedRow = Jsoup.parse(authorizedDriver.getPageSource()).select(".ui-table-row").get(0).select(".i-portfolio-table-marker-obj");
 
             history.setProfitInUSD(new BigDecimal(parsedRow.get(4).text().replace("$", "")));
