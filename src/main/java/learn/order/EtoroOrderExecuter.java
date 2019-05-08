@@ -4,6 +4,7 @@ import learn.monitoring.etoro.EtoroPosition;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,13 +14,18 @@ import java.util.List;
 @Component
 public class EtoroOrderExecuter {
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     @Autowired
     WebDriver authorizedDriver;
 
     @PostConstruct
     private void init() throws InterruptedException {
-        setMode("virtual");
+        if (!activeProfile.equalsIgnoreCase("live")) {
+            setMode("virtual");
+        }
+
     }
 
     public void setMode(String mode) throws InterruptedException {

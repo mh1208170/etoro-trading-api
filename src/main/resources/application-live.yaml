@@ -1,0 +1,7 @@
+spring:
+  profiles: live
+  data:
+    mongodb:
+      database: live
+
+

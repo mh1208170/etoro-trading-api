@@ -17,4 +17,9 @@ public class PositionError {
         this.id = id;
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Error at id: %s etoroRef: %s timestamp: %s", id, position.getEtoroRef(), position.getDateTime().toString() );
+    }
 }

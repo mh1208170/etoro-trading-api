@@ -5,6 +5,7 @@ import learn.monitoring.*;
 import learn.monitoring.etoro.EtoroPosition;
 import learn.order.EtoroOrderExecuter;
 import learn.order.Order;
+import learn.user.notification.ErrorNotifier;
 import learn.user.units.TradeUnitService;
 import learn.history.HistoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class ZuluPortfolioMonitor implements Monitor {
 
     @Autowired
     private PositionErrorRepository positionErrorRepository;
+
+    @Autowired
+    private ErrorNotifier notifier;
 
     private Set<String> ignoreList = new HashSet<>();
 
@@ -149,7 +153,9 @@ public class ZuluPortfolioMonitor implements Monitor {
                 return true;
             } else {
                 log.error("error while closing pos: {}, was probably closed by SL or TP", pos);
-                positionErrorRepository.save(new PositionError(pos.getId(), pos));
+                PositionError error = new PositionError(pos.getId(), pos);
+                positionErrorRepository.save(error);
+                notifier.sendErrorNotification(error);
                // throw new RuntimeException("could not close position" + pos + " will try again");
                 return true;
             }
