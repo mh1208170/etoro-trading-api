@@ -3,5 +3,7 @@ spring:
   data:
     mongodb:
       database: live
+server:
+  port: 7777
 
 
